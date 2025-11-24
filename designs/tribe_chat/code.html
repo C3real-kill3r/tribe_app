@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tribe Chat - Marathon Crew</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#ee8c2b",
+              "background-light": "#f8f7f6",
+              "background-dark": "#221910",
+            },
+            fontFamily: {
+              "display": ["Plus Jakarta Sans", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light dark:bg-background-dark">
+<div class="relative flex h-screen w-full flex-col group/design-root overflow-hidden max-w-md mx-auto">
+<!-- Header Bar -->
+<div class="flex items-center bg-background-light dark:bg-background-dark border-b border-white/10 p-4 sticky top-0 z-10">
+<div class="flex size-10 shrink-0 items-center -ml-2">
+<button class="flex items-center justify-center p-2 text-zinc-500 dark:text-zinc-400">
+<span class="material-symbols-outlined">arrow_back_ios_new</span>
+</button>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Marathon Crew group avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAXiZsPYz0VolLUviyCMilRR3IruUkVfaZlreTtEpBZ72CfL2P78a58RDTPBh5AAWNG1YRLG23VuaGFz0PrXwtr2VPGDwqUqmuu0EcO38jNQCgAMLcSiMTDlBzmcq5e2yD0FiVHoh0S7GCZdfeaYSqxEO9ZS54mioTUtZAXBKNmnVk_bYxWESBfinRaO4c068arwMg7oR6P6GF9llprSidsTNX-9thY-9-y-s9MHIYlE_jWU00vWyqkBa3QgtJG82aL6jat9efs0Ok");'></div>
+<div class="flex-1 ml-4">
+<h2 class="text-zinc-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">Marathon Crew</h2>
+<p class="text-zinc-500 dark:text-zinc-400 text-sm">6 members</p>
+</div>
+<div class="flex w-10 items-center justify-end">
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 w-10 bg-transparent text-zinc-500 dark:text-zinc-400">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Message Area -->
+<div class="flex-1 overflow-y-auto p-4 space-y-4">
+<!-- MetaText: Timestamp -->
+<p class="text-zinc-500 dark:text-zinc-500 text-sm font-normal leading-normal text-center py-2">Today</p>
+<!-- SingleMessage: From Others -->
+<div class="flex items-end gap-3 max-w-[85%]">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-8 shrink-0 self-end" data-alt="Avatar of Alex" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCwD6y-SLlcSiTGOfPQWUoDyICc17zAWCwkgRSDjj2WIWea3XuylyIw_dC4FL7oMhpsZNA8e5anqvV8TP5uqQeD93HAegHaJMSm7t6fYbjLxNdi20Q10z7Ekp0mZBjkgIdw2esxVPRLlWQlLUssEhkIqAc7QRmiFfntL4lDXQJ04yttm02SoeKfzTURwcOEvHcgo136tXiDptaiQPW3rGx7fE0hgUn_4oDECz2FHUnja9J7q-qHCqN_FTu9RJCo7sTAaQpYPHMI9RI");'></div>
+<div class="flex flex-1 flex-col gap-1 items-start">
+<p class="text-zinc-500 dark:text-zinc-400 text-[13px] font-normal leading-normal ml-3">Alex</p>
+<p class="text-base font-normal leading-normal flex rounded-xl rounded-bl-sm px-4 py-3 bg-zinc-200 dark:bg-zinc-800 text-zinc-900 dark:text-white">
+                        Hey everyone! Just finished my 5k run for the day. Feeling great!
+                    </p>
+</div>
+</div>
+<!-- SingleMessage: From You (Sender) -->
+<div class="flex items-end gap-3 justify-end max-w-[85%] ml-auto">
+<div class="flex flex-1 flex-col gap-1 items-end">
+<p class="text-base font-normal leading-normal flex rounded-xl rounded-br-sm px-4 py-3 bg-primary/90 text-white">
+                       Awesome job, Alex! Killing it. I'm hitting the pavement in an hour.
+                    </p>
+</div>
+</div>
+<!-- SingleMessage with ReactionBar -->
+<div class="flex flex-col gap-1 max-w-[85%]">
+<div class="flex items-end gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-8 shrink-0 self-end" data-alt="Avatar of Sara" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDAKye8T5OOaIzIIjpe-Uo7SfYplprhdeL-sAUrfJmgV2sxCwTi71D26cX3S-fVxAm6_dfWFWebeFeMbJAc1aIqLW9RTPDICl6clGy1Qxnbn44kzPlRYnwYL7BWDOnI1E0byd-Za1Ep-S70Sq5iWKC4UcK7VUiBB_p-XovjSIt7dP6BWqlfoDl-FwC4zUVwxKOjU6WMhYBehb-21SEn0PIK6xXgyunuweirCzVskCDxqi66NS7QdxigaOK_HN8n_TS_G9TCeRAdR50");'></div>
+<div class="flex flex-1 flex-col gap-1 items-start">
+<p class="text-zinc-500 dark:text-zinc-400 text-[13px] font-normal leading-normal ml-3">Sara</p>
+<p class="text-base font-normal leading-normal flex rounded-xl rounded-bl-sm px-4 py-3 bg-zinc-200 dark:bg-zinc-800 text-zinc-900 dark:text-white">
+                            Way to go! Your consistency is inspiring.
+                        </p>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 pl-11">
+<div class="flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-full bg-primary/20 cursor-pointer">
+<span class="material-symbols-outlined text-primary text-base">thumb_up</span>
+<p class="text-primary text-xs font-bold leading-normal">3</p>
+</div>
+<div class="flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-full bg-zinc-200 dark:bg-zinc-800 cursor-pointer">
+<span class="text-lg">🔥</span>
+<p class="text-zinc-600 dark:text-zinc-300 text-xs font-bold leading-normal">1</p>
+</div>
+</div>
+</div>
+<!-- Image Message -->
+<div class="flex items-end gap-3 max-w-[85%]">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-8 shrink-0 self-end" data-alt="Avatar of Mike" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC_PmxVJP-xtUKZ-xT_LYz-C7Tjn2e4hPETtweuqnTRIofzix7N2rBMzwGX8LSqf0d1nZC64tKWMNxQlI6FVPOqinC8sgNmHB-C2jDB_BLgva2Zw-gR91RvPlJa10wG3gGzFEhI4Gw-0W6hVpfLZD76U3wycgEdIroVIdsxMy_1PsEhcmR-0IYsnGpwmSVK7_xE-y0aZMBSHenUm8CDo5A_0WZtG0AIX5Y31fKwnB9tBUhSq66uhTVSH6CBZEOgomopHYRPkLLNR4Q");'></div>
+<div class="flex flex-1 flex-col gap-1 items-start">
+<p class="text-zinc-500 dark:text-zinc-400 text-[13px] font-normal leading-normal ml-3">Mike</p>
+<div class="relative group cursor-pointer">
+<img alt="View of a running trail at sunset" class="rounded-xl object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-0fy0gQ7DSEhOA9MOWBzhdeTv8yaLqfiFJ6XlL6aIzpZxpi32leA-nw-v5QwlIP7siqapJuayUqUFglFWqr4QMywyiuRwguGcXIqNPVNEokYRsg2fMatFNU-vEn7e0ufbSw1AzJNNI922s-ztSrMdiet8a5MOjRtUhRZRCYKu81sVyEXSK2gZfBV0qwKxF-OM-A-TpAIR8l7Sqe5PTHvtub0pI4-qJORay5PJ_ubgk6t3ngYTdF7DgAtbX-AFNgoYk2Bvqwz3yeY"/>
+<div class="absolute inset-0 bg-black/20 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-white text-4xl">play_circle</span>
+</div>
+</div>
+<p class="text-base font-normal leading-normal flex rounded-xl rounded-bl-sm mt-1 px-4 py-3 bg-zinc-200 dark:bg-zinc-800 text-zinc-900 dark:text-white">
+                        Check out the view from my run this morning!
+                    </p>
+</div>
+</div>
+<!-- System Message: Goal Completion -->
+<div class="flex justify-center my-4">
+<div class="flex items-center gap-2 bg-primary/20 rounded-full px-4 py-2">
+<span class="material-symbols-outlined text-primary text-lg">workspace_premium</span>
+<p class="text-primary text-sm font-medium">Mike completed the 'Run 10k this week' goal!</p>
+</div>
+</div>
+</div>
+<!-- Input Bar -->
+<div class="bg-background-light dark:bg-background-dark border-t border-white/10 p-2 sm:p-4 mt-auto">
+<div class="flex items-center gap-2">
+<button class="flex items-center justify-center size-10 shrink-0 rounded-full text-zinc-500 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-800">
+<span class="material-symbols-outlined">add_circle</span>
+</button>
+<div class="relative flex-1">
+<input class="w-full bg-zinc-200 dark:bg-zinc-800 text-zinc-900 dark:text-white placeholder:text-zinc-500 dark:placeholder:text-zinc-500 border-none rounded-full py-2.5 pl-4 pr-12 focus:ring-2 focus:ring-primary/50" placeholder="Message your Tribe..." type="text"/>
+<button class="absolute right-2 top-1/2 -translate-y-1/2 flex items-center justify-center size-8 shrink-0 rounded-full text-zinc-500 dark:text-zinc-400">
+<span class="material-symbols-outlined">sentiment_satisfied</span>
+</button>
+</div>
+<button class="flex items-center justify-center size-10 shrink-0 rounded-full bg-primary text-white">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Accountability Partners Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#F97316", // Warm Orange
+              "primary-light": "#FFF7ED",
+              "secondary": "#10B981", // Teal/Emerald Green
+              "background-light": "#F7F8FA",
+              "background-dark": "#101012",
+              "surface-light": "#FFFFFF",
+              "surface-dark": "#1C1C1E",
+              "text-primary-light": "#1C1C1E",
+              "text-primary-dark": "#F8F9FA",
+              "text-secondary-light": "#64748B",
+              "text-secondary-dark": "#9E9E9E",
+              "border-light": "#E2E8F0",
+              "border-dark": "#2D2D2F",
+            },
+            fontFamily: {
+              "display": ["Plus Jakarta Sans", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "1.25rem", "xl": "1.5rem", "full": "9999px"},
+            boxShadow: {
+                "subtle": "0 4px 12px 0 rgba(0, 0, 0, 0.05)",
+                "subtle-dark": "0 4px 12px 0 rgba(0, 0, 0, 0.15)",
+            }
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light dark:bg-background-dark text-text-primary-light dark:text-text-primary-dark">
+<div class="relative flex h-auto min-h-screen w-full flex-col">
+<header class="sticky top-0 z-10 flex items-center justify-between p-4 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-lg">
+<div class="flex size-12 shrink-0 items-center justify-start">
+<button class="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-transparent text-text-primary-light dark:text-text-primary-dark">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</button>
+</div>
+<h1 class="text-lg font-bold">Accountability</h1>
+<div class="flex w-12 items-center justify-end">
+<button class="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-transparent text-text-primary-light dark:text-text-primary-dark">
+<span class="material-symbols-outlined text-2xl">person_add</span>
+</button>
+</div>
+</header>
+<main class="flex flex-col gap-6 p-4">
+<div class="flex cursor-pointer flex-col gap-4 rounded-xl bg-surface-light dark:bg-surface-dark shadow-subtle dark:shadow-none dark:border dark:border-border-dark p-4 transition-shadow hover:shadow-lg">
+<div class="flex items-start justify-between gap-4">
+<div class="flex items-center gap-4">
+<div class="relative h-14 w-14 shrink-0">
+<div class="h-14 w-14 rounded-full bg-cover bg-center bg-no-repeat" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBRHQUrlys_p-nWbiEuiyCMqOZ1ugLHdovBfj-xCGYKnA6J_2kmavR5Y8gddyRczXPs3d5Ai3FP-9HXdogftVSsWdPYQ6KZUD8_No7PpaERpo6YasyZeLskxSRhPK0alwVz7MPH2cDRFAD87MkMfERnGXYWFmj-8BrpwKqLuhZJ_SUQgVikiHweiozimCNa1RGVRKBpKdqoWIOQqzCMQyHcT9xqUVbo_F7Ncm7kcZuX-WmOhRqSFlLjq6khH7VHHLD771kKypQFvdE");'></div>
+<div class="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full border-2 border-surface-light bg-primary dark:border-surface-dark">
+<span class="material-symbols-outlined text-sm text-white">notifications</span>
+</div>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-base font-bold line-clamp-1">Alex Chen</p>
+<p class="text-sm font-normal text-text-secondary-light dark:text-text-secondary-dark line-clamp-2">3 Shared Goals</p>
+</div>
+</div>
+<div class="shrink-0">
+<button class="flex h-10 w-10 items-center justify-center rounded-full text-text-secondary-light hover:bg-gray-100 dark:text-text-secondary-dark dark:hover:bg-gray-800">
+<span class="material-symbols-outlined text-2xl">more_horiz</span>
+</button>
+</div>
+</div>
+<div class="flex flex-col gap-3">
+<div class="flex items-center gap-3 rounded-lg bg-background-light dark:bg-background-dark/50 p-3">
+<div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary-light dark:bg-primary/20 text-primary">
+<span class="material-symbols-outlined text-lg">fitness_center</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-semibold">Workout 3x a week</p>
+<p class="text-xs text-text-secondary-light dark:text-text-secondary-dark">Progress: 2/3 sessions</p>
+</div>
+<div class="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-white">
+<span class="material-symbols-outlined text-lg">done</span>
+</div>
+</div>
+<div class="flex items-center gap-3 rounded-lg bg-background-light dark:bg-background-dark/50 p-3">
+<div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary-light dark:bg-primary/20 text-primary">
+<span class="material-symbols-outlined text-lg">auto_stories</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-semibold">Read 10 pages daily</p>
+<p class="text-xs text-text-secondary-light dark:text-text-secondary-dark">Progress: 5/7 days</p>
+</div>
+<div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 text-primary dark:bg-primary/30">
+<span class="material-symbols-outlined text-lg">forward_to_inbox</span>
+</div>
+</div>
+</div>
+</div>
+<div class="flex cursor-pointer flex-col gap-4 rounded-xl bg-surface-light dark:bg-surface-dark shadow-subtle dark:shadow-none dark:border dark:border-border-dark p-4 transition-shadow hover:shadow-lg">
+<div class="flex items-start justify-between gap-4">
+<div class="flex items-center gap-4">
+<div class="h-14 w-14 shrink-0 rounded-full bg-cover bg-center bg-no-repeat" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDu0SM5mL34lqxHgKGVyrPh9G8w4S4YbFmot1ttvnuxwh0nNRGewsjv3wh7IzqJaXzquYqMQHsX92PxVgSnZBZgl12BUDh8-i8AUQhPeJsMRWk1699anZQKfOevIqg5LJ6Y7tdeLMHrXBVRpiJ8YE7Zbm1ULOA-PrrT3lL4v2AUwUcicSUdfb4VMuTeyQXbWvGhp6NJpNnq9-piWDudJtGGcheT75W2ruetNiRMdEplCxRE0p3n-nkYk4wBkrzlKWaJQGqSf-klQdQ");'></div>
+<div class="flex flex-col justify-center">
+<p class="text-base font-bold line-clamp-1">Sarah Lee</p>
+<p class="text-sm font-normal text-text-secondary-light dark:text-text-secondary-dark line-clamp-2">5 Shared Goals</p>
+</div>
+</div>
+<div class="shrink-0">
+<button class="flex h-10 w-10 items-center justify-center rounded-full text-text-secondary-light hover:bg-gray-100 dark:text-text-secondary-dark dark:hover:bg-gray-800">
+<span class="material-symbols-outlined text-2xl">more_horiz</span>
+</button>
+</div>
+</div>
+<div class="flex flex-col gap-3">
+<div class="flex items-center gap-3 rounded-lg bg-background-light dark:bg-background-dark/50 p-3">
+<div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary-light dark:bg-primary/20 text-primary">
+<span class="material-symbols-outlined text-lg">code</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-semibold">Daily coding challenge</p>
+<p class="text-xs text-text-secondary-light dark:text-text-secondary-dark">Progress: 1/7 days</p>
+</div>
+<div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 text-primary dark:bg-primary/30">
+<span class="material-symbols-outlined text-lg">celebration</span>
+</div>
+</div>
+<div class="flex items-center gap-3 rounded-lg bg-background-light dark:bg-background-dark/50 p-3 opacity-60">
+<div class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700 text-text-secondary-light dark:text-text-secondary-dark">
+<span class="material-symbols-outlined text-lg">local_florist</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-semibold text-text-secondary-light dark:text-text-secondary-dark line-through">Morning meditation</p>
+<p class="text-xs text-text-secondary-light dark:text-text-secondary-dark">Completed</p>
+</div>
+<div class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700">
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-border-light dark:border-border-dark bg-background-light/50 dark:bg-surface-dark/50 p-8 text-center">
+<div class="flex h-16 w-16 items-center justify-center rounded-full bg-primary-light text-primary dark:bg-primary/20">
+<span class="material-symbols-outlined text-4xl">group_add</span>
+</div>
+<h3 class="text-lg font-bold">Find Your Accountability Partner</h3>
+<p class="max-w-xs text-sm text-text-secondary-light dark:text-text-secondary-dark">Team up with a friend to stay motivated and crush your goals together.</p>
+<button class="mt-4 flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-full h-12 px-6 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em]">
+<span class="material-symbols-outlined">add</span>
+<span class="truncate">Invite a Friend</span>
+</button>
+</div>
+</main>
+</div>
+
+</body></html>

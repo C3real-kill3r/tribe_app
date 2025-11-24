@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Onboarding Flow</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": {
+                            DEFAULT: "#FF7A5A",
+                            light: "#FFF2EE",
+                            dark: "#E56E51"
+                        },
+                        "background": "#FFFCFA",
+                        "surface": "#FFFFFF",
+                        "text-primary": "#2D2D2D",
+                        "text-secondary": "#6B6B6B"
+                    },
+                    fontFamily: {
+                        "sans": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.75rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "2xl": "2rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            min-height: 100dvh;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background font-sans text-text-primary">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="flex flex-col min-h-[100dvh] p-6">
+<div class="flex-grow flex flex-col justify-center">
+<div class="flex justify-center items-center gap-2 mb-8">
+<span class="material-symbols-outlined text-4xl text-primary-dark">diversity_3</span>
+<span class="text-2xl font-bold text-text-primary">Together</span>
+</div>
+<div class="px-4">
+<div class="bg-cover bg-center flex flex-col justify-end overflow-hidden rounded-2xl min-h-[320px]" data-alt="Abstract illustration of diverse friends connecting and celebrating with vibrant shapes" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDthIwgiDXVqoUKkXG4uBFGdS7WWXfvZaazImDLYudi2mXupXnh8mnQCATqEgJJoF1L3PDp34y6fQhXO-Qgt58_Ovmd0u-vD1EJhOj6hNy8ddjFgSsbddLJjRyYJVduUN373UOeqFYPK1hh4_HmkDzRL5QYoy5LHMpczVWgF2pwJ7zuvvKnwwAfX4D3Htya3ZVjhuPVcqL2Hlt8s24BcfZildVwTfQXeJ44G3fjO8mXUQC5lCFBJqdHdGYmlWlEroS5uUwgtfKE2Ts");'>
+</div>
+</div>
+<h1 class="text-text-primary tracking-tight text-3xl font-bold leading-tight px-4 text-center pb-2 pt-10">Strengthen Friendships, Achieve Goals Together.</h1>
+</div>
+<div class="flex flex-col pt-5 gap-4">
+<div class="flex w-full flex-row items-center justify-center gap-2 pb-4">
+<div class="h-2 w-6 rounded-full bg-primary"></div>
+<div class="h-2 w-2 rounded-full bg-primary/30"></div>
+<div class="h-2 w-2 rounded-full bg-primary/30"></div>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-14 px-5 flex-1 bg-primary text-white text-lg font-semibold shadow-lg shadow-primary/30 transition-transform active:scale-95">
+<span class="truncate">Get Started</span>
+</button>
+</div>
+</div>
+<div class="flex flex-col min-h-[100dvh] p-6 bg-background">
+<div class="flex-grow flex flex-col justify-center">
+<h1 class="text-text-primary tracking-tight text-3xl font-bold leading-tight px-2 text-center pb-8 pt-6">Everything You Need to Succeed Together</h1>
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-5 p-4 rounded-xl bg-surface shadow-sm">
+<div class="flex items-center justify-center w-14 h-14 rounded-full bg-primary-light text-primary-dark">
+<span class="material-symbols-outlined !text-3xl">photo_camera</span>
+</div>
+<div class="flex-1">
+<h2 class="font-semibold text-text-primary text-base">Share Photos &amp; Moments</h2>
+<p class="text-sm text-text-secondary">Capture and share your journey with friends.</p>
+</div>
+</div>
+<div class="flex items-center gap-5 p-4 rounded-xl bg-surface shadow-sm">
+<div class="flex items-center justify-center w-14 h-14 rounded-full bg-primary-light text-primary-dark">
+<span class="material-symbols-outlined !text-3xl">forum</span>
+</div>
+<div class="flex-1">
+<h2 class="font-semibold text-text-primary text-base">Group Chat &amp; Messaging</h2>
+<p class="text-sm text-text-secondary">Stay connected and motivate each other.</p>
+</div>
+</div>
+<div class="flex items-center gap-5 p-4 rounded-xl bg-surface shadow-sm">
+<div class="flex items-center justify-center w-14 h-14 rounded-full bg-primary-light text-primary-dark">
+<span class="material-symbols-outlined !text-3xl">flag</span>
+</div>
+<div class="flex-1">
+<h2 class="font-semibold text-text-primary text-base">Collaborative Goal Setting</h2>
+<p class="text-sm text-text-secondary">Set and track your collective ambitions.</p>
+</div>
+</div>
+<div class="flex items-center gap-5 p-4 rounded-xl bg-surface shadow-sm">
+<div class="flex items-center justify-center w-14 h-14 rounded-full bg-primary-light text-primary-dark">
+<span class="material-symbols-outlined !text-3xl">shield_person</span>
+</div>
+<div class="flex-1">
+<h2 class="font-semibold text-text-primary text-base">Accountability Partners</h2>
+<p class="text-sm text-text-secondary">Keep each other on track and celebrate wins.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col pt-5 gap-4">
+<div class="flex w-full flex-row items-center justify-center gap-2 pb-4">
+<div class="h-2 w-2 rounded-full bg-primary/30"></div>
+<div class="h-2 w-6 rounded-full bg-primary"></div>
+<div class="h-2 w-2 rounded-full bg-primary/30"></div>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-14 px-5 flex-1 bg-primary text-white text-lg font-semibold shadow-lg shadow-primary/30 transition-transform active:scale-95">
+<span class="truncate">Continue</span>
+</button>
+</div>
+</div>
+<div class="flex flex-col min-h-[100dvh] p-6 bg-background">
+<div class="flex-grow flex flex-col justify-center">
+<h1 class="text-text-primary tracking-tight text-3xl font-bold leading-tight px-2 text-center pb-2 pt-6">Just a Few More Steps</h1>
+<p class="text-text-secondary text-base font-normal leading-normal pb-8 pt-1 px-4 text-center">Enable these features for the best experience.</p>
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between p-4 rounded-xl bg-surface shadow-sm">
+<div class="flex items-center gap-5">
+<div class="flex items-center justify-center w-12 h-12 rounded-full bg-primary-light text-primary-dark">
+<span class="material-symbols-outlined">notifications</span>
+</div>
+<div class="flex-1">
+<h2 class="font-semibold text-text-primary text-base">Enable Notifications</h2>
+<p class="text-sm text-text-secondary">Get updates on goal progress.</p>
+</div>
+</div>
+<button class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 bg-primary">
+<span class="sr-only">Use setting</span>
+<span aria-hidden="true" class="inline-block h-5 w-5 translate-x-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
+</button>
+</div>
+<div class="flex items-center justify-between p-4 rounded-xl bg-surface shadow-sm">
+<div class="flex items-center gap-5">
+<div class="flex items-center justify-center w-12 h-12 rounded-full bg-primary-light text-primary-dark">
+<span class="material-symbols-outlined">photo_library</span>
+</div>
+<div class="flex-1">
+<h2 class="font-semibold text-text-primary text-base">Access Photos</h2>
+<p class="text-sm text-text-secondary">Share memories with your group.</p>
+</div>
+</div>
+<button class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 bg-gray-200">
+<span class="sr-only">Use setting</span>
+<span aria-hidden="true" class="inline-block h-5 w-5 translate-x-0 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
+</button>
+</div>
+</div>
+<p class="px-6 text-xs text-center text-text-secondary/80 mt-8">Your privacy is important to us. We will never share your data without your permission.</p>
+</div>
+<div class="flex flex-col pt-5 gap-3">
+<div class="flex w-full flex-row items-center justify-center gap-2 pb-4">
+<div class="h-2 w-2 rounded-full bg-primary/30"></div>
+<div class="h-2 w-2 rounded-full bg-primary/30"></div>
+<div class="h-2 w-6 rounded-full bg-primary"></div>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-14 px-5 flex-1 bg-primary text-white text-lg font-semibold shadow-lg shadow-primary/30 transition-transform active:scale-95">
+<span class="truncate">Create Account</span>
+</button>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-14 px-5 flex-1 bg-transparent text-primary-dark text-lg font-semibold transition-colors hover:bg-primary-light">
+<span class="truncate">Log In</span>
+</button>
+</div>
+</div>
+</div>
+
+</body></html>

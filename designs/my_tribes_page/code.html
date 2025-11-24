@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>My Tribes</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#ee8c2b",
+              "background-light": "#f8f7f6",
+              "background-dark": "#221910",
+              "card-light": "#ffffff",
+              "card-dark": "#2d241a",
+              "text-primary-light": "#1f1f1f",
+              "text-primary-dark": "#f0eade",
+              "text-secondary-light": "#6b6b6b",
+              "text-secondary-dark": "#b9ab9d",
+              "accent": "#0bda16"
+            },
+            fontFamily: {
+              "display": ["Plus Jakarta Sans", "Noto Sans", "sans-serif"]
+            },
+            borderRadius: {
+              "DEFAULT": "1rem",
+              "lg": "2rem",
+              "xl": "3rem",
+              "full": "9999px"
+            },
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+        }
+        .stacked-avatars > div:not(:first-child) {
+            margin-left: -16px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex min-h-screen w-full flex-col">
+<!-- Top App Bar -->
+<header class="sticky top-0 z-10 flex h-20 items-center justify-between bg-background-light/80 px-4 backdrop-blur-sm dark:bg-background-dark/80">
+<div class="flex h-12 w-12 items-center justify-start">
+<!-- Intentionally empty for layout -->
+</div>
+<h1 class="flex-1 text-center text-lg font-bold tracking-tight text-text-primary-light dark:text-text-primary-dark">My Tribes</h1>
+<div class="flex h-12 w-12 items-center justify-end">
+<button class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full text-text-primary-light dark:text-text-primary-dark">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 space-y-4 px-4 pb-28">
+<!-- List Item 1 -->
+<div class="flex cursor-pointer items-center gap-4 rounded-lg bg-card-light p-4 shadow-sm dark:bg-card-dark">
+<div class="relative h-14 w-14 shrink-0">
+<div class="h-14 w-14 rounded-full bg-cover bg-center" data-alt="A group of friends laughing together outdoors." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAlz9fnGIoDxWSyjmoV2e8cJOq-HfW3TlSDghFL7kt9iuLdYowRwsKbwUP7g0nzKcCI57EX7Lgm4gVeyvSPiTTd-dOCOvADRYVBlSsDiVrm2C7sGYDXhb5DI2No0AEAzbux7MwyZ4J6PA9ezjz09Hc_b7dwL1nz_T_8kWOzz0ClXIOxMk6V6cgVuy3jPeBspCyQGTnKahTbKS0UoA2Jgn1R_UWcYQAsy8VUDiSi7jeiHt4BBwKenknXVOPL5-tcISrFDGsSeJpY28g');"></div>
+<div class="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full border-2 border-card-light bg-accent dark:border-card-dark">
+<span class="text-xs font-bold text-white">3</span>
+</div>
+</div>
+<div class="flex-1">
+<p class="font-bold text-text-primary-light dark:text-text-primary-dark">Weekend Warriors</p>
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark">Mike: Can't wait for this weekend!</p>
+</div>
+<div class="shrink-0">
+<span class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark">chevron_right</span>
+</div>
+</div>
+<!-- List Item 2 -->
+<div class="flex cursor-pointer items-center gap-4 rounded-lg bg-card-light p-4 shadow-sm dark:bg-card-dark">
+<div class="relative flex h-14 w-14 shrink-0 items-center stacked-avatars">
+<div class="h-10 w-10 rounded-full border-2 border-card-light bg-cover bg-center dark:border-card-dark" data-alt="Portrait of a smiling woman with glasses." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBbIJRxoXFk4Lcn2fUbGby8NLCCNSpvVAcN1fl1Rx4YmUwtyWUrxBfGj0S30uDXOlVY99UC2qNhhzib7o6GDmR17LQStT3k7qaMFtdcppWrRJhSGpomAVhSAo31VERrZFCTs9vCDitd1d3oFMNiIuDecnIk3Ka-xiMWM_8Z9kA3dA7ILZZ3BAg-YjvaPObxbdIXNy7-fI5M7Mi0mKzIZFL9R-fskG72J9Sv7nWen5K0zorP9xRaNbaQ_F6f3KKU__xDFyIAWKb0zhE');"></div>
+<div class="h-10 w-10 rounded-full border-2 border-card-light bg-cover bg-center dark:border-card-dark" data-alt="Portrait of a smiling man with a beard." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDcV9JY0B8Mkoq_X7ph8jIySZkboV9gNnraQ1ME2tIR7oQNg-8FRnBs1D7vv8Ewi5hP1l_WS1M_lHUWjRPjtGTL74rrKfMNgPiJMWyIrRQRk3Y6TtP76EHph-9I3m87C30oy3BmojjgwlAn67BUHdqwCgbCUqygGg3IyfZ7apYjshPoN5oF6QVVTFiY5NS63T5tqLAW9D4DtBiaGrdr2J1ojSNG3ZfmP3qXh1q8tPrIVC6A2Jy5C1aZGNvLYEpFLPU5mSZNh0JDTzM');"></div>
+<div class="h-10 w-10 rounded-full border-2 border-card-light bg-cover bg-center dark:border-card-dark" data-alt="Portrait of a smiling man with short hair." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCH8Ub5su2cZL8fvS_vxCwXLOAprYeC8YNZiF5VvBKoC756ZbISUGSfhIV1jrF5bMl9KHrY8YkDrelG6fqQyOVWiFaXsRNa2rTLkdiyJAK-l75cjcyluVbbLSKqWpHmkAs4V00u_eZV6SC_6S2J4i070Xxy0qXMaUqGK0NYO18HnnHhN469QJ6dWS1ptm41FlInphq80nwxL6RCRiIuCkZAYI502FAx6sH35kqGblZnNHGKfZBF7a7aAkYkb19IcTkbJQJKHch2NBE');"></div>
+</div>
+<div class="flex-1">
+<p class="font-bold text-text-primary-light dark:text-text-primary-dark">Book Club Besties</p>
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark">Sarah added a new goal.</p>
+</div>
+<div class="shrink-0">
+<span class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark">chevron_right</span>
+</div>
+</div>
+<!-- List Item 3 -->
+<div class="flex cursor-pointer items-center gap-4 rounded-lg bg-card-light p-4 shadow-sm dark:bg-card-dark">
+<div class="h-14 w-14 shrink-0 rounded-full bg-cover bg-center" data-alt="A group of colleagues collaborating on a project." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDHvbcqrWgmnsvbK15ZfB6q5s4-gf4Ynn7iEgHHHKAQD2uYCOSJqBhNex1MzUcSaTWnibEg0wGOJBMoj4bJOJ6m9XtSUiqWF2HCwH7yvy7Hk3jKjzd1K4GKFUKLnl11XWN1JyKshPWT0eYFhuXrGmKqO-iiHjpCcomQtvXoqmDkAJQLgFWjJ66dtqiiY2M4eqxYtZB2Ee2HUTIPi4sOY1_wTrFtaLKu8kx4Fu-FkEq75GYxk2vSdh5vhrCc40ax8WoDeZhKKolh64M');"></div>
+<div class="flex-1">
+<p class="font-bold text-text-primary-light dark:text-text-primary-dark">Project Launch Team</p>
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark">Goal 'Run a 5k' is 50% complete.</p>
+</div>
+<div class="shrink-0">
+<span class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark">chevron_right</span>
+</div>
+</div>
+<!-- List Item 4 -->
+<div class="flex cursor-pointer items-center gap-4 rounded-lg bg-card-light p-4 shadow-sm dark:bg-card-dark">
+<div class="relative h-14 w-14 shrink-0">
+<div class="h-14 w-14 rounded-full bg-cover bg-center" data-alt="A group of people enjoying a vacation." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCdBMMEt2rnhk5qQOdL4rbTdVmi2HOBt4-dMsnP7qaPU8UOtxDV4ZeMOe_BL54vhHnCDl4dmGoabSpjpP3cbN_t92efKxnPFuRh8mgyjjsofiorj9iAyquNSByEIoDX5t4SLtxAjeHV6il1pjN9AcUtKUK7fsUSCyFgwCNxasMI5mZH-jL3Hvp7FQWa3vTM1bpuTXbzw7Hi3GwPEGGrryMkBCdQnItdQu1UnOhAkdZt_jQnXS4g4b2kCTQrt2e-Q53UwFOJm-Fx6BY');"></div>
+<div class="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-accent">
+<div class="size-2.5 rounded-full bg-white"></div>
+</div>
+</div>
+<div class="flex-1">
+<p class="font-bold text-text-primary-light dark:text-text-primary-dark">Vacation Planners</p>
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark">3 new photos in 'Vacation '24'.</p>
+</div>
+<div class="shrink-0">
+<span class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark">chevron_right</span>
+</div>
+</div>
+</main>
+<!-- Floating Action Button -->
+<div class="fixed bottom-0 right-0 z-10 p-5">
+<button class="flex h-14 cursor-pointer items-center justify-center gap-3 overflow-hidden rounded-full bg-primary pl-5 pr-6 text-background-dark shadow-lg">
+<span class="material-symbols-outlined">add</span>
+<span class="truncate text-base font-bold">Create Tribe</span>
+</button>
+</div>
+</div>
+</body></html>

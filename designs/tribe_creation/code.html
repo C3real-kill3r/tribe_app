@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Create New Tribe</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#ee8c2b",
+              "background-light": "#f8f7f6",
+              "background-dark": "#221910",
+            },
+            fontFamily: {
+              "display": ["Plus Jakarta Sans", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light dark:bg-background-dark">
+<div class="relative flex h-auto min-h-screen w-full flex-col">
+<!-- Top App Bar -->
+<header class="sticky top-0 z-10 flex items-center bg-background-light/80 dark:bg-background-dark/80 p-4 backdrop-blur-sm">
+<button class="text-slate-800 dark:text-white flex size-10 shrink-0 items-center justify-center rounded-full">
+<span class="material-symbols-outlined text-2xl">close</span>
+</button>
+<h1 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-10">Create New Tribe</h1>
+</header>
+<main class="flex-1 px-4">
+<!-- Profile Header / Avatar Uploader -->
+<div class="flex py-6 @container">
+<div class="flex w-full flex-col gap-4 items-center">
+<div class="relative">
+<div class="bg-slate-200 dark:bg-slate-800 bg-center bg-no-repeat aspect-square bg-cover rounded-full h-32 w-32" data-alt="Abstract gradient placeholder for tribe avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCa-3IcB90omzzxB6irlhYEoOD8WHJ1q3rgDbmaaWEm4r8seGmoj51e6fkarmewnIeaX-o4x3y_7WbVfUvmdt-pkF85qY6UhY-pHbQZZvI-TGxU0ncPx2ljMZ-wFhqtSfSMyS-P7j3YTbI61yREWPWRchJT1hl5wPIUe2T88XnAxy1VggtPvLvRmBcrB3BUc3ETeYNdj9eNpQ8X1sZHK-3YDJA5Me0uK1EusPI7EBzIewmUOy2L2MJrNJtD23TCa9PQPzNepTZ9M5c");'></div>
+<div class="absolute bottom-0 right-0 flex items-center justify-center size-10 bg-primary text-white rounded-full border-4 border-background-light dark:border-background-dark">
+<span class="material-symbols-outlined text-xl">add_a_photo</span>
+</div>
+</div>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-primary/20 text-primary text-sm font-bold leading-normal tracking-[0.015em] w-full max-w-[480px] @[480px]:w-auto">
+<span class="truncate">Upload Photo</span>
+</button>
+</div>
+</div>
+<!-- Text Fields -->
+<div class="flex flex-col gap-4">
+<label class="flex flex-col w-full">
+<p class="text-slate-800 dark:text-white text-base font-medium leading-normal pb-2">Tribe Name</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded text-slate-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/50 h-14 placeholder:text-slate-400 dark:placeholder:text-slate-500 p-4 text-base font-normal leading-normal" placeholder="e.g., Weekly Hiking Crew" value=""/>
+</label>
+<label class="flex flex-col w-full">
+<p class="text-slate-800 dark:text-white text-base font-medium leading-normal pb-2">Description (Optional)</p>
+<textarea class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded text-slate-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/50 min-h-28 placeholder:text-slate-400 dark:placeholder:text-slate-500 p-4 text-base font-normal leading-normal" placeholder="e.g., Our goal is to hike a new trail every Saturday!"></textarea>
+</label>
+</div>
+<!-- Section Header -->
+<div class="pt-8 pb-3">
+<h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">Add Members</h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Select friends to invite to your new Tribe.</p>
+</div>
+<!-- Search and Member Selection -->
+<div class="flex flex-col gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500">search</span>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded text-slate-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/50 h-14 placeholder:text-slate-400 dark:placeholder:text-slate-500 pl-12 pr-4 text-base font-normal leading-normal" placeholder="Search friends..." value=""/>
+</div>
+<!-- Selected Members Pills -->
+<div class="flex flex-wrap items-center gap-2">
+<div class="flex items-center gap-2 rounded-full bg-primary/20 p-1 pr-2">
+<img class="h-6 w-6 rounded-full object-cover" data-alt="Profile picture of Sarah Day" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0-WcbSNH_GYYi_cRqei9WlBSt9k6Ajj_mKNxwHjMrhsa36RXy6OveyEU8YuhpaaBiHwTxcunWnJFJ8WcPhbxlo7O5oVf_B5omqRJ0eZ74vX1P9OmBpVILl2Tvume63CYvVt-0jQxVvvd4IlXbKYXFdAcvGbadjeF-rWxSKnua0KF33nSGMyEpIBpySc3zRtNo4ms-P61ZOy5Z7BSFm4LOt073eKuyzj0s8Ly-1Ohdh6F_0YbbZ2ock5oDEzlUedK_JnVIxsP7-7I"/>
+<span class="text-sm font-medium text-primary">Sarah Day</span>
+<button class="text-primary/70 hover:text-primary">
+<span class="material-symbols-outlined text-base">close</span>
+</button>
+</div>
+<div class="flex items-center gap-2 rounded-full bg-primary/20 p-1 pr-2">
+<img class="h-6 w-6 rounded-full object-cover" data-alt="Profile picture of Mark Johnson" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlLLUeXiTWtgol9e-pRGuoCJEaOormre2pjYPnQfyVYQNghNS2pioIhM2azHCz6lpWbZh57eslwF36-kZshBQFcaXwYBRjchJ-7XiNuQkdM-VwuabAUzDGovO8B525qeTUNme0z8i3ExJkyPJJqTRoUZr-GYbNERVVHAdOOK9a5UupnbevoUyuv5ol6g1tol1OWTp8b0sHTdREP4c25Rh674FEHVMyaiEvCO1XRd550HQBf99ONFcSOGCJhQ0pmbDLoyEqifQuka8"/>
+<span class="text-sm font-medium text-primary">Mark J.</span>
+<button class="text-primary/70 hover:text-primary">
+<span class="material-symbols-outlined text-base">close</span>
+</button>
+</div>
+</div>
+<!-- Friend List -->
+<div class="flex flex-col gap-2 pb-24">
+<!-- Friend Item - Selected -->
+<div class="flex items-center gap-4 rounded p-2 bg-primary/10 dark:bg-primary/20">
+<img class="h-12 w-12 rounded-full object-cover" data-alt="Profile picture of Sarah Day" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSjQTdR3627MZ6Xin-7dutWt_J-gIHMZEPHEItE31BRQvNNEbazUZ7aj4SQNgfHTN0aNtMnfvXWcRpQ3ED35hm8kkQkaMvdAyo2sPMo61EXG2HU79P0RsUXMFWkMP5yuRJ88hetjFajxgCGoksNPqLSaYt8Diexnub-WRE0kqQyEqJj23mVtcqvfY_iJIQl_-nVMUkPt_6Cl0N_p0JGUaTC1gstGNPFSwMycL5K_-PmKyY9G5rC961tla_0oPu7-MQl_jYYnzX1PA"/>
+<p class="flex-1 font-medium text-slate-800 dark:text-white">Sarah Day</p>
+<div class="flex items-center justify-center size-6 rounded-full bg-primary text-white">
+<span class="material-symbols-outlined text-base font-bold">check</span>
+</div>
+</div>
+<!-- Friend Item - Unselected -->
+<div class="flex items-center gap-4 rounded p-2">
+<img class="h-12 w-12 rounded-full object-cover" data-alt="Profile picture of Alex Smith" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCw4n5WDoPh34hskJZvDkFNrtNIRULrgn7KPi7UdFwGKDkIzLmGKf6cRlkNG7cz3G4o5mabSTR6UaIiR2NUEj6M9E2Sms-5Zi0pL3KBXVXaaAOh_vcJLMhocd8GRW2xRCinNmOsIXLJg_n4M6D_b9tuVd8hNJLcl5zUzWeVQoDhSy-fI7uHFJAC_s4PmPz44z_P5hHHIgsJWnNMHAZVFxjrcg6QpY_SW-0yNRQY16Vj8BlTqeqe131frqBIKTK1tbMPn3Dpb0NodLI"/>
+<p class="flex-1 font-medium text-slate-800 dark:text-white">Alex Smith</p>
+<div class="flex items-center justify-center size-6 rounded-full border-2 border-slate-300 dark:border-slate-600"></div>
+</div>
+<!-- Friend Item - Selected -->
+<div class="flex items-center gap-4 rounded p-2 bg-primary/10 dark:bg-primary/20">
+<img class="h-12 w-12 rounded-full object-cover" data-alt="Profile picture of Mark Johnson" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAa0gJ0Nx25sdVueQsEa5f-sH4kmBIjrJyYyfrlgWXhL7ot48aKz-5i4NL2_ImpYDbEO00PpIIL5ycHamGXHt5XFlIeA1deaZwRZr0FPf7eWMQaEKQPyJFvZE6qTLkgLmfjLbR95i4S9WwG2OhfgfkwoX8keTthj9YdvnXvdKmzIwNnNQTO18tN3NHqXKiK8_jGFBIV6FCXhBhFyEyMlP1T4gB1XcJbZ4EbMmYucvGLa-NLadLjDY56PC9bOxKhKrChHbwVbWcanKQ"/>
+<p class="flex-1 font-medium text-slate-800 dark:text-white">Mark Johnson</p>
+<div class="flex items-center justify-center size-6 rounded-full bg-primary text-white">
+<span class="material-symbols-outlined text-base font-bold">check</span>
+</div>
+</div>
+<!-- Friend Item - Unselected -->
+<div class="flex items-center gap-4 rounded p-2">
+<img class="h-12 w-12 rounded-full object-cover" data-alt="Profile picture of Emily Carter" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZN5IOExFXsKnHOAFsNBN_VTu3_yI46zppn3py3GImYP659uBKJ7Q_4nwbUBnT98xwX6_ol8hcZT-ngkN-pSYVMPNlIjsagTQpf6yAz715xxzj5hY0qjsz_1blxgi_ptZwvR0KvXVayQT59KuxGTf58ygbjcrOGFA_aHBHWwUFoBM_TFcnqhmV64TLYbzGnRkgvLrHjGAyKnCwEZF2IULcNIegSqFBrsXuyxHkxOhXnLcUpUBECL7eXgZw16wKOFiOgZb4k7pH5TI"/>
+<p class="flex-1 font-medium text-slate-800 dark:text-white">Emily Carter</p>
+<div class="flex items-center justify-center size-6 rounded-full border-2 border-slate-300 dark:border-slate-600"></div>
+</div>
+</div>
+</div>
+</main>
+<!-- CTA Button -->
+<footer class="sticky bottom-0 z-10 bg-gradient-to-t from-background-light/100 dark:from-background-dark/100 to-transparent p-4">
+<button class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-full h-14 px-4 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] disabled:bg-slate-300 disabled:text-slate-500 dark:disabled:bg-slate-700 dark:disabled:text-slate-400">
+<span class="truncate">Create Tribe (2)</span>
+</button>
+</footer>
+</div>
+</body></html>

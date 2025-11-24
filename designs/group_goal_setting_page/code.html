@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Collaborative Goal Tracker</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": {
+              DEFAULT: "#FFC978",
+              light: "#FFF4E5"
+            },
+            "background-light": "#FEFBF6",
+            "background-dark": "#1C1B1A",
+            "surface-light": "#FFFFFF",
+            "surface-dark": "#262524",
+            "text-primary-light": "#2D2D2D",
+            "text-primary-dark": "#EAEAEA",
+            "text-secondary-light": "#7E7E7E",
+            "text-secondary-dark": "#A0A0A0"
+          },
+          fontFamily: {
+            "display": ["Plus Jakarta Sans", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "1rem",
+            "lg": "1.5rem",
+            "xl": "2rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light dark:bg-background-dark text-text-primary-light dark:text-text-primary-dark">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<header class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10">
+<div class="flex size-12 shrink-0 items-center justify-start">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</div>
+<h1 class="text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Trip to Costa Rica</h1>
+<div class="flex w-12 items-center justify-end">
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 bg-transparent gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0">
+<span class="material-symbols-outlined text-2xl">more_vert</span>
+</button>
+</div>
+</header>
+<main class="flex flex-col flex-1 px-4">
+<section class="flex flex-col gap-5 p-6 rounded-xl bg-surface-light dark:bg-surface-dark mt-4">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-3xl font-bold tracking-tighter">$1,950</p>
+<p class="text-text-secondary-light dark:text-text-secondary-dark text-sm font-normal">of $3,000 goal</p>
+</div>
+<div class="flex items-center gap-2 rounded-full bg-primary-light dark:bg-primary/20 px-3 py-1.5">
+<span class="material-symbols-outlined text-base text-amber-600 dark:text-primary">schedule</span>
+<p class="text-amber-700 dark:text-primary text-sm font-medium">15 days left</p>
+</div>
+</div>
+<div class="relative h-2 rounded-full bg-slate-100 dark:bg-zinc-800">
+<div class="h-2 rounded-full bg-primary" style="width: 65%;"></div>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-3">
+<div class="overflow-visible">
+<div class="bg-center bg-no-repeat aspect-square bg-cover border-surface-light dark:border-surface-dark bg-zinc-300 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400 rounded-full flex items-center justify-center size-9 border-2" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA5SM2W4AZClYHQ4fmsYWEC0prynYGkZtfuJ9xI0G1dFf2BoNkOFEU-QcHp8ojFUyDPdcAOLcUe614sHe00oLnoK9gV3AhYDUReMmJZmTt0XH9G65SLWs66SPg57iigfr7rypq7UDck0xMA1ivb0fMKtiyHbiTeXUI9z6sHHG40nxuFp1uDaXe1fpdzusdxrt7OQ_sc3Z8GhJTnwZw_ZMwCTIpF0XSJbDgfhbnBGemLFrlZVHinqazkpGl9LH2D-su0fGTnQtess3I");'></div>
+</div>
+<div class="overflow-visible">
+<div class="bg-center bg-no-repeat aspect-square bg-cover border-surface-light dark:border-surface-dark bg-zinc-300 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400 rounded-full flex items-center justify-center size-9 border-2" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDMNmBS9SRYkSnO12HlK_VSW0a9lsde7L3QEDQmHAuLygDWKfRIXhKJ8r0AsWyR_oTZgcnvOf9fVgiKKJ_ibltJeoFZD-QtyHbbZZfj3EPpqcmwXQqnHTrxXtts9qYH6zYkYIHxq7mHpHX9_BSK4KfO9DiJNIy7NBkCWOwSeAUwPTkBv28no_v_NnQoAX2BYsaQ61mwhlRZYb5H9EBVQMyDCqjevwuqm8_7u0VnRSrYcIe7n947RJH1DrC5qulEZcrhPjgKPm_LytM");'></div>
+</div>
+<div class="overflow-visible">
+<div class="bg-center bg-no-repeat aspect-square bg-cover border-surface-light dark:border-surface-dark bg-zinc-300 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400 rounded-full flex items-center justify-center size-9 border-2" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD4hMGiCBfOpu2R4iT4N2oax7--giEIkXPa2Ymt10ZZamivrxIHlQpG6m97upPj7G1hMv1wWqpfQSfSL3nWkm47h4KTR3jqam-G8AXVARljUBgrCvYpeHfLxCjZA49vT-v89Amz6vUxiJtVF82bja87sqgPzetWpcY-q9wb86Y4NccQTZN1NaamfkO_Tmr_aG8M8-ZfGt8SjFehhV7kkTtkIDP0_SGe511EJuYjiqLiHvh_gHwwJYCwpIQFWSat3s9AVP_PSWuvceY");'></div>
+</div>
+<div class="overflow-visible">
+<div class="bg-center bg-no-repeat aspect-square bg-cover border-surface-light dark:border-surface-dark bg-zinc-300 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400 rounded-full flex items-center justify-center size-9 border-2" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCQaEGfhq70y_s2vl_5kei92vYOUXVX1j8--wNSGToSccPMluY4qzUKBxPhD8C47i0fxYLoLsEjn4Qh_uJbWjkrRW2AlkD-tfYNPdCsnJjJUZ1714uHGWHRJSTfFqiRIHk-S0e-mRHYU1QXOZ7sTnkaeJT-uE7lqUzDYprXQJn7_OpFHfRJXd9KoM2Ic6hXDx2fAKc-AWGibxV7hDUies8u07kZd9hnGpMKARdT3NYn61KrAynGh_HQE_k81LfYEu43SBI2U9zQyXM");'></div>
+</div>
+</div>
+<p class="text-sm font-medium text-text-primary-light dark:text-text-primary-dark">65% Funded</p>
+</div>
+</section>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em] pb-2 pt-8">Activity</h2>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-4 min-h-[72px] py-2 justify-between">
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-12 w-12" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAXIgJFP1_4tPGZl--ySZm5ouUI6hRrudnC7_o2bHXCcbcMrciRmwFs5h_aIpnJT_tpsTUl6RZaV8377GRRc7od4I8HVyoO2-FWG_mrwlcXSuyVvVlg66HvI7JVuTah5TrWSN9vKcicHq2XrRW0GSG9yI0nZ46gOgluWbJCVe1KzaMe5mrlrPr_vsii_nG-8PMcmKGwfnxKCS7ygGtSI6Xk9NaVjRnd8PuTGABkSRNDktKhhypWaM_AjluWDsjyWa92-ofelQEUvz8");'></div>
+<div class="flex flex-col justify-center">
+<p class="font-medium leading-normal line-clamp-1">Maria Garcia</p>
+<p class="text-text-secondary-light dark:text-text-secondary-dark text-sm font-normal leading-normal line-clamp-2">Today, 10:45 AM</p>
+</div>
+</div>
+<div class="shrink-0">
+<p class="font-medium leading-normal text-green-600 dark:text-green-400">+$150.00</p>
+</div>
+</div>
+<div class="flex items-center gap-4 min-h-[72px] py-2 justify-between">
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-12 w-12" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBUqSvDAOii1mDTEunmZHOGCuHLLdrYEZxe-6fyUxPiqj0f76pEEOXXQlerd2xT6t3tQoEwShsDDebkLQhk3yDiz7aBRwlL7rjAlQV7eBr7httg86IXOHSUGe8cL089oUtQzotvbgkPAZI9XfjQHPdcue--IhbD6LGsn4Lo5R3drlcd6oVkyRb1ESDzLPi49YhMPCuDEEoUQtET2TpFVbnl_pZpR2NEhG-FMd4H539wXEyPlTv2bRDZXWZwVxwAU1jHjuNFt82sQkI");'></div>
+<div class="flex flex-col justify-center">
+<p class="font-medium leading-normal line-clamp-1">Alex Johnson</p>
+<p class="text-text-secondary-light dark:text-text-secondary-dark text-sm font-normal leading-normal line-clamp-2">Yesterday, 8:12 PM</p>
+</div>
+</div>
+<div class="shrink-0">
+<p class="font-medium leading-normal text-green-600 dark:text-green-400">+$75.00</p>
+</div>
+</div>
+<div class="flex items-center gap-4 min-h-[72px] py-2 justify-between">
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-12 w-12" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB3xgCmpxXaYVEcgDTuX0JxG04a69Ucq2X1IMp6a4GDL7d7XveV8MOFrFhhDpD9U2IRosteUexmwihMq8fc7dJbaKN9IZ7t2lwnbyyMQA7zd4HcX7cx7rJRg5_bPhJTpBfsl_f-D9_g95PkfzeLz1jJw6NNsBMXLwtQ7cDJlINVDNuHcab7HHx4_763c8gNgwsRj05KZgweZ7sua5Rkw_D51mqCfExaKjtGws3sGEz-BAFFRbDZgLHkwd7xyOYMmHOGllIndk2QC2A");'></div>
+<div class="flex flex-col justify-center">
+<p class="font-medium leading-normal line-clamp-1">Sam Lee</p>
+<p class="text-text-secondary-light dark:text-text-secondary-dark text-sm font-normal leading-normal line-clamp-2">3 days ago</p>
+</div>
+</div>
+<div class="shrink-0">
+<p class="font-medium leading-normal text-green-600 dark:text-green-400">+$200.00</p>
+</div>
+</div>
+</div>
+</main>
+<footer class="sticky bottom-0 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm p-4 mt-6">
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center size-14 rounded-full bg-slate-100 dark:bg-surface-dark text-text-secondary-light dark:text-text-secondary-dark">
+<span class="material-symbols-outlined text-2xl">chat_bubble</span>
+</button>
+<button class="flex-1 flex items-center justify-center h-14 px-6 rounded-full bg-text-primary-light dark:bg-primary text-background-light dark:text-black text-base font-bold">
+          Contribute
+        </button>
+</div>
+</footer>
+</div>
+
+</body></html>

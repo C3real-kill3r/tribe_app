@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Chat with Jordan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#13eca4",
+              "background-light": "#f6f8f7",
+              "background-dark": "#10221c",
+              "warm-bg-light": "#FFFBF8",
+              "warm-bg-dark": "#1C1A19",
+              "bubble-light": "#F3EAE4",
+              "bubble-dark": "#332F2C",
+              "text-light": "#4B4440",
+              "text-dark": "#EAE3DE",
+              "subtle-light": "#A89F99",
+              "subtle-dark": "#8A817C"
+            },
+            fontFamily: {
+              "display": ["Plus Jakarta Sans", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "1.25rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-warm-bg-light dark:bg-warm-bg-dark font-display">
+<div class="relative flex h-screen w-full flex-col overflow-hidden">
+<header class="flex items-center bg-warm-bg-light/80 dark:bg-warm-bg-dark/80 backdrop-blur-sm p-4 sticky top-0 z-10 border-b border-black/5 dark:border-white/5">
+<button class="flex size-12 shrink-0 items-center justify-start text-text-light dark:text-text-dark hover:text-black dark:hover:text-white transition-colors">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</button>
+<div class="flex items-center gap-3 flex-1">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 shrink-0" data-alt="Profile picture of Jordan Smith" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAFoA_yURU6LOksgiJrNkBWXq83x7Yk7-NMK00CzpRGZyIOzUXbBh8kFz5K_vsmywO63XghCxZQLhyzH6PHfc5YsTLpNO5MMI6yfGytFqBmTBT21T3roUDxpcVdKNvs_-O-XcPXAvntGMgSdvSdiPLs0f8SSchrECbUmJgUU7MgCvOy1uYeueiufNpRn7N95UnX10iL8ERBPI7yr7Fc7AfywOBobOkL8s0PQKIirc8148Ntfgwsqhjb-QwbMPb3tqingB6mIHknjZs");'></div>
+<span class="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full bg-green-500 ring-2 ring-warm-bg-dark"></span>
+</div>
+<div class="flex flex-col">
+<h2 class="text-text-light dark:text-text-dark text-lg font-bold leading-tight tracking-tight">Jordan Smith</h2>
+<p class="text-sm text-subtle-light dark:text-subtle-dark">Online</p>
+</div>
+</div>
+<div class="flex w-12 items-center justify-end">
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 bg-transparent text-subtle-light dark:text-subtle-dark hover:text-text-light dark:hover:text-text-dark transition-colors gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0">
+<span class="material-symbols-outlined text-2xl">more_vert</span>
+</button>
+</div>
+</header>
+<main class="flex-1 overflow-y-auto px-4 pt-4 pb-2">
+<div class="flex flex-col gap-2">
+<div class="flex justify-center my-4">
+<p class="text-subtle-light dark:text-subtle-dark text-sm font-medium bg-black/5 dark:bg-white/5 rounded-full px-3 py-1">Today</p>
+</div>
+<div class="flex items-end gap-2 self-start max-w-[80%]">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-8 h-8 shrink-0" data-alt="Profile picture of Jordan Smith" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB6KZr9dsWpBFAJREn9t40zJ0U06oAg4hyh6fymb4if-HZdvs1VHhBJKi6-5B9MVc9SHDyMSjHLr6xspDN1jwSdF40MR7gi_ZC6oe0aphDxWIh5TxIoKMIbZViLkv5eYgw8NOf2Uov2bYAUuUTupJEdME1rGQiXN-fkicgisPLBZVCZBaQEAo3LiLEHhVaZvxh77gv6AqIMrPNCvlDx4-xNclc5pJhI4-ibswBq_lHkQYjTw4yf5u-jiTBs4C_ovJXkVncg7tpyDcQ");'></div>
+<div class="flex flex-col gap-1 items-start">
+<div class="text-base font-normal leading-relaxed flex max-w-[360px] rounded-t-lg rounded-br-lg px-4 py-3 bg-bubble-light dark:bg-bubble-dark text-text-light dark:text-text-dark">
+<p>Hey! Are we still on for the hike this weekend? The weather is looking perfect. ☀️</p>
+</div>
+</div>
+</div>
+<div class="flex items-end gap-3 self-end max-w-[80%]">
+<div class="flex flex-col gap-1 items-end">
+<div class="text-base font-normal leading-relaxed flex max-w-[360px] rounded-t-lg rounded-bl-lg px-4 py-3 bg-gradient-to-br from-[#FFD2B1] to-[#FFAA8E] text-text-light dark:from-[#755242] dark:to-[#8E6354] dark:text-text-dark">
+<p>Absolutely! I was just looking at the trail map. I'm so excited!</p>
+</div>
+</div>
+</div>
+<div class="flex items-end gap-3 self-end max-w-[80%]">
+<div class="flex flex-col gap-1 items-end w-full">
+<div class="text-base font-normal leading-relaxed flex max-w-[360px] rounded-t-lg rounded-bl-lg px-4 py-3 bg-gradient-to-br from-[#FFD2B1] to-[#FFAA8E] text-text-light dark:from-[#755242] dark:to-[#8E6354] dark:text-text-dark w-full">
+<p>I found this great spot for photos. Check it out!</p>
+</div>
+<div class="bg-center bg-no-repeat aspect-video bg-cover rounded-lg w-full max-w-[360px] mt-1" data-alt="A scenic view of a mountain trail at sunset" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCaaCS4NhqYUQFEH0kIbPX0Xp5zJB-zonTE8OXoAK7VvElIJAvyzBAZLje9MihbrCkQuMQubJ4zsh6simVM4kgFw2Aaa5jwcMsgwAKpd-W7Vh5JoSunSm-TjlB2JrkX3RKU4SIhI5NfcIFTZFqt09rBdI8EcVi2kSXbyC0YAl2XSFwW5wn4qgRyDQPbWgB_O2MBVARt5ZnHuNRqPFjCFC6ZCA_Lf2ECCd1w44Dat7XL2bQt9Ggnbx_sshh4QxOdoBMz1GWxxln6_2M");'></div>
+<p class="text-xs text-subtle-light dark:text-subtle-dark mt-1">Sent · 10:45 AM</p>
+</div>
+</div>
+<div class="flex items-end gap-2 self-start max-w-[80%]">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-8 h-8 shrink-0" data-alt="Profile picture of Jordan Smith" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDCene_RV6vznl0RFu1WHp5QnxQI-rqgNC7XKGL-V4O8Jd_su-Y-KxiV3qLTA3ufK1xhagp0v77p2CEl02XZMUG-cjsGJxi9aDST59_5hWmHg3iKtKoKqmIFnf3WF6lRWSy7gUAK6k43GqEA0y74MfEAOiRFSE9RrdUk2pb9eBUAH-Oxpxp1yjJySSmgAzHzRgw5W5KgcVCraZQVOJiBn46NbswnseWdAmxwkAnpRbWFiEYqxKe8TZ3Ekz9gvjWu4D86d3EkcPVGLg");'></div>
+<div class="flex flex-col gap-1 items-start">
+<div class="text-base font-normal leading-relaxed flex max-w-[360px] rounded-t-lg rounded-br-lg px-4 py-3 bg-bubble-light dark:bg-bubble-dark text-text-light dark:text-text-dark">
+<p>Wow, that looks amazing! We have to go there.</p>
+</div>
+</div>
+</div>
+<div class="flex items-end gap-2 self-start max-w-[80%]">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-8 h-8 shrink-0" data-alt="Profile picture of Jordan Smith" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAX67f3Dh4ugG91u0QFHDwd0RDnU2sOjD59K0FQfrItqoGqKQi8jVPs136e6kpZfh2mmUQq1MsYZMbw5cu_haLLKc8oWpey59ONmZ2BMGHZOcvWqBuy3GVm5c4QL2_q_mxono3fTJtV-NQWb1apVUiIVAqf9A9-4fH4ekmhmgZ6L_uDbNnvxRMS6QxYXhhgM4wLwZiwBmBYPYxW92JhLgqaf9w_kX3NHQlNtHTVWL8pJgzlpzb2YlYCMJacm54Eg7_LB3dl4VJHb90");'></div>
+<div class="flex flex-col gap-1 items-start">
+<div class="text-base font-normal leading-relaxed flex items-center gap-1.5 max-w-[360px] rounded-t-lg rounded-br-lg px-4 py-3 bg-bubble-light dark:bg-bubble-dark text-text-light dark:text-text-dark">
+<span class="block w-2 h-2 bg-subtle-light dark:bg-subtle-dark rounded-full animate-[pulse_1.2s_cubic-bezier(0.4,0,0.6,1)_infinite]"></span>
+<span class="block w-2 h-2 bg-subtle-light dark:bg-subtle-dark rounded-full animate-[pulse_1.2s_cubic-bezier(0.4,0,0.6,1)_infinite_0.2s]"></span>
+<span class="block w-2 h-2 bg-subtle-light dark:bg-subtle-dark rounded-full animate-[pulse_1.2s_cubic-bezier(0.4,0,0.6,1)_infinite_0.4s]"></span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="bg-warm-bg-light/80 dark:bg-warm-bg-dark/80 backdrop-blur-sm p-4 sticky bottom-0 border-t border-black/5 dark:border-white/5">
+<div class="flex items-center gap-2">
+<button class="flex items-center justify-center h-12 w-12 shrink-0 text-subtle-light dark:text-subtle-dark hover:text-text-light dark:hover:text-text-dark transition-colors rounded-full">
+<span class="material-symbols-outlined text-2xl">add_photo_alternate</span>
+</button>
+<div class="flex-1 relative flex items-center">
+<input class="w-full bg-bubble-light dark:bg-bubble-dark border-none focus:ring-2 focus:ring-[#FFAA8E] dark:focus:ring-[#755242] rounded-full text-text-light dark:text-text-dark placeholder-subtle-light dark:placeholder-subtle-dark h-12 px-5" placeholder="Type a message..." type="text"/>
+<button class="absolute right-3 flex items-center justify-center h-8 w-8 shrink-0 text-subtle-light dark:text-subtle-dark hover:text-text-light dark:hover:text-text-dark transition-colors rounded-full">
+<span class="material-symbols-outlined text-2xl">sentiment_satisfied</span>
+</button>
+</div>
+<button class="flex items-center justify-center h-12 w-12 shrink-0 bg-gradient-to-br from-[#FFD2B1] to-[#FFAA8E] dark:from-[#755242] dark:to-[#8E6354] text-text-light dark:text-text-dark rounded-full shadow-md">
+<span class="material-symbols-outlined text-2xl">send</span>
+</button>
+</div>
+</footer>
+</div>
+
+</body></html>

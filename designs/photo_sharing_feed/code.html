@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Post Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 300,
+        'GRAD' 0,
+        'opsz' 24
+    }
+  </style>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#F9A826", // Warm Amber
+            "background-light": "#FDFCFB",
+            "background-dark": "#121212",
+            "surface-light": "#FFFFFF",
+            "surface-dark": "#1E1E1E",
+            "text-light-primary": "#1C1C1E",
+            "text-dark-primary": "#F2F2F7",
+            "text-light-secondary": "#636366",
+            "text-dark-secondary": "#8E8E93",
+            "accent": "#F9A826",
+            "like": "#FF3B30",
+          },
+          fontFamily: {
+            "display": ["Plus Jakarta Sans", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "1rem",
+            "lg": "1.5rem",
+            "xl": "2rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      min-height: 100dvh;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light-primary dark:text-text-dark-primary">
+<div class="relative mx-auto flex h-full min-h-screen w-full max-w-md flex-col overflow-x-hidden">
+<div class="sticky top-0 z-10 flex items-center justify-between border-b border-gray-200/50 bg-background-light/80 px-4 py-3 backdrop-blur-md dark:border-gray-800/50 dark:bg-background-dark/80">
+<div class="flex size-10 shrink-0 items-center justify-start">
+<button class="flex size-10 items-center justify-center">
+<span class="material-symbols-outlined">arrow_back_ios_new</span>
+</button>
+</div>
+<h1 class="flex-1 text-center text-xl font-bold">Post</h1>
+<div class="flex w-10 items-center justify-end">
+<button class="text-text-light-secondary dark:text-text-dark-secondary">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</div>
+</div>
+<div class="flex-grow overflow-y-auto pb-28">
+<div class="flex flex-col border-b border-gray-200/50 dark:border-gray-800/50">
+<div class="flex items-center gap-3 px-4 pb-3 pt-4">
+<div class="aspect-square w-10 rounded-full bg-cover bg-center" data-alt="Profile picture of Alex, a man with glasses." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBsebK14QzU14x1TXozJ0iis5GB84C0T0aczbJdpOvQmdTNATxQe_ypQIYF7Vet4JaLoWTaRNUGbeGIAKB7MSulB_zxOKkMa2qPVQB9E4a-eLj_8PTzjazpRbw6WO-_hCeLHJcTA9khRNMoAt5v0XvzVPfthArRKLBt1oFkLOFUdvpzJEaCxfGlNQWdJcbEq-mPg02uyrwsMPDHVKbIUH7a0kK6Xfk9RCFn2OboTlOAJ_9_zzqZ0UYZ39fFllKA2XhPnsC2KWR-veg");'></div>
+<div class="flex-grow">
+<p class="font-semibold">Alex</p>
+<p class="text-xs text-text-light-secondary dark:text-text-dark-secondary">2 hours ago</p>
+</div>
+</div>
+<div class="aspect-[4/5] w-full bg-cover bg-center" data-alt="A person's running shoes on a paved trail at sunrise." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBZcmEAD_3Rcsg8OVlxtAV-6ukxPUwxgCXtxt-Neb6Ja6XU9RyK9w1yF710YzNx90-Nsm8Cc0nJG8bm3V_9Nq9VUNR6q6YHfkkqxwc4FLN1WFZkXD_WDakg1pWb2ZuPjRntX4-8Trn-AlNbQ5YvtFNx48tEcRYkYOFTFJfu60MQcuWrH5WpkHZWIjA3zzDjAEQoN-DxIq8i8HgvK7VNBW_HkNj76Vh8-PYN0zUYTfdFlAst_AeOJAQBLJy-aJWg_LiTjdmS7C6r5o8");'></div>
+<div class="flex flex-col gap-2 px-4 py-3">
+<p class="text-sm">
+            First training session in the books! Felt great to get out there and start this journey with you all.
+          </p>
+<div class="inline-flex w-fit items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary dark:bg-primary/20">
+<span class="material-symbols-outlined !text-[16px]">flag</span>
+<span>Goal: Run a 5K</span>
+</div>
+<div class="flex items-center gap-4 pt-2">
+<button class="group flex items-center gap-1.5 text-text-light-secondary hover:text-like dark:text-text-dark-secondary dark:hover:text-like">
+<span class="material-symbols-outlined transition-transform group-hover:scale-110 !text-2xl">favorite_border</span>
+<span class="text-sm font-medium">12</span>
+</button>
+<div class="flex items-center gap-1.5 text-text-light-secondary dark:text-text-dark-secondary">
+<span class="material-symbols-outlined !text-2xl">chat_bubble_outline</span>
+<span class="text-sm font-medium">3</span>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-4 px-4 pt-4">
+<div class="flex items-start gap-3">
+<div class="mt-1 aspect-square w-9 shrink-0 rounded-full bg-cover bg-center" data-alt="Profile picture of Mia, a woman with curly hair." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuATHGafYJThG04lEy25QkjdMi-LdbFkInY0HOJh7_IDK3ImMxLoAQHtE4lTdpwuFkRorYrTnZW1XuEX_G4VMOPBKgf0RZ7wKfLLqyMzVsHdp2RyTzsOJp81EcEOtnzks8ZKJsn22wvkFUctPlknKFbMkjI7eNbFoghrk-UvQLGMJznqtD4FJjsHu3ABbDxiXC_uJ0XlTAVAp17yxr54IFjhv560fma7MX4eDpa4BRhnguLCC_Ex4bk7SopUc34FWof_IdZq8UGqRfg");'></div>
+<div class="flex-grow rounded-xl bg-gray-100 px-3 py-2 dark:bg-surface-dark">
+<p class="text-sm font-semibold">Mia</p>
+<p class="text-sm">Yesss! So proud of you! Way to start strong. 💪</p>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<div class="mt-1 aspect-square w-9 shrink-0 rounded-full bg-cover bg-center" data-alt="Profile picture of Chloe, a smiling woman outdoors." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBAnAI7eAmRWSSeJi0bzDIILNOEn4c4zbsqWZLSI1mY83TSHNfmxB8uzDU4UF44OqFid3_t3aYTt3QONCUUtD_uDZ0oqxFkc0McR46lxwnix_7B6SfIzVfAGki3y8OSPkScwfP_Mt6pu0Qh40PgtT76R64HKEGQEXfv1Tin66wV0l1RqlURrAVKnSONMV_wX9IUBtFcH8fmky9y0Icp-VDtSfWMFbDJtRhX-MItwQ4B4I_xrh1C5VP4RGblrC5CGohACqAFRY7Gs_o");'></div>
+<div class="flex-grow rounded-xl bg-gray-100 px-3 py-2 dark:bg-surface-dark">
+<p class="text-sm font-semibold">Chloe</p>
+<p class="text-sm">Amazing! That sunrise looks incredible. Keep it up!</p>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<div class="mt-1 aspect-square w-9 shrink-0 rounded-full bg-cover bg-center" data-alt="Profile picture of Ben, a man in a hat." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBBEf7yAu_CKTRcyvo065MuG7i4t6rmMRbeL1hqj4DeqHFJZxiWxJiiV6cMXS7IE2NzwHMMZiJbk_LLXM2lR3q1vS-Q5qGgbnkjrA16Ed2q12Y5g_M2JYkPDmtiv-fQWjlZefZ2TUGgRnEVGwFskKAS63_CR9kJpEH2cwkvXd7HPaWG23HGGuHn_E_PQDF2Q10iZtcWgGTn4mFXZG0MUqUZBxTddQH9N2yPzN-seTOIXRawLHpJX0XqsHuKR7HmWi4K6t_1F-Kl50I");'></div>
+<div class="flex-grow rounded-xl bg-gray-100 px-3 py-2 dark:bg-surface-dark">
+<p class="text-sm font-semibold">Ben</p>
+<p class="text-sm">Let's gooo! 🔥</p>
+</div>
+</div>
+</div>
+</div>
+<div class="fixed bottom-0 z-10 w-full max-w-md border-t border-gray-200/50 bg-background-light/80 p-4 backdrop-blur-md dark:border-gray-800/50 dark:bg-background-dark/80">
+<div class="flex items-center gap-2">
+<div class="aspect-square w-9 shrink-0 rounded-full bg-cover bg-center" data-alt="User's profile picture, a person smiling." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDExC54qhXfDxvK_In9fEpYaXQuESef5FqDOM_x3Mni7dsvCO_hi2xIoJl1VAzwaEQBjbbWLIn5N0wnbnjsM-e0Nb-ZVoM_WZAyrYKHnwMVR6JXGDbd5o4i2sjieHHCPdEVr0GPhfxkHAtEdtD29KxD3enNcnbu00K0mdU2F2recXw74OLmEbekJyfyazGBVyGyQat_LKcMBpsCOA134GBSHlcQYIWkxiX43Iw1UBV-gXa_ggHmrPlW2iZ-LgqyRhAFsGDLzuPKBOw");'></div>
+<div class="relative flex-grow">
+<input class="w-full rounded-full border-none bg-gray-100 py-2.5 pl-4 pr-10 text-sm placeholder:text-text-light-secondary focus:ring-2 focus:ring-primary focus:ring-opacity-50 dark:bg-surface-dark dark:placeholder:text-text-dark-secondary" placeholder="Add a comment..." type="text"/>
+<button class="absolute inset-y-0 right-0 flex items-center pr-3 text-text-light-secondary dark:text-text-dark-secondary">
+<span class="material-symbols-outlined">sentiment_satisfied</span>
+</button>
+</div>
+<button class="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-white">
+<span class="material-symbols-outlined" style="font-variation-settings: 'wght' 500;">send</span>
+</button>
+</div>
+</div>
+</div>
+
+</body></html>
