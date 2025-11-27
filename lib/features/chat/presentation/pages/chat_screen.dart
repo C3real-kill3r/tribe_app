@@ -1,8 +1,11 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:tribe/core/di/service_locator.dart' as di;
+import 'package:tribe/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:tribe/features/chat/data/services/websocket_service.dart';
 import 'package:tribe/features/chat/presentation/bloc/conversation_bloc.dart';
 import 'package:tribe/features/chat/presentation/bloc/conversation_event.dart';
 import 'package:tribe/features/chat/presentation/bloc/conversation_state.dart';
@@ -114,6 +117,7 @@ class ChatItem {
   final bool isUnread;
   final bool isGroup;
   final VoidCallback onTap;
+  final String? typingUserName;
 
   ChatItem({
     required this.name,
@@ -123,6 +127,7 @@ class ChatItem {
     required this.isUnread,
     required this.isGroup,
     required this.onTap,
+    this.typingUserName,
   });
 }
 
@@ -135,23 +140,75 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  final WebSocketService _webSocketService = WebSocketService();
+  StreamSubscription<WebSocketMessage>? _wsSubscription;
+  ConversationBloc? _conversationBloc;
+  String? _currentUserId;
 
-  List<ChatItem> _convertConversationsToChatItems(List<dynamic> conversations) {
+  List<ChatItem> _convertConversationsToChatItems(
+    List<dynamic> conversations,
+    Map<String, Map<String, dynamic>?>? typingIndicators,
+  ) {
     return conversations.map((conv) {
       final conversationId = conv['id']?.toString() ?? '';
       final isGroup = conv['is_group'] ?? false;
-      final name = conv['name'] ?? 
-                   (conv['participants'] != null && conv['participants'].isNotEmpty
-                       ? conv['participants'][0]['full_name'] ?? 'Unknown'
-                       : 'Unknown');
-      final imageUrl = conv['image_url'] ?? 
-                       (conv['participants'] != null && conv['participants'].isNotEmpty
-                           ? conv['participants'][0]['profile_image_url'] ?? ''
-                           : '');
+      
+      // For direct messages, find the other participant (not the current user)
+      String name;
+      String imageUrl;
+      
+      if (isGroup || (conv['name'] != null && conv['name'].toString().isNotEmpty)) {
+        // Group chat or named conversation
+        name = conv['name']?.toString() ?? 'Group Chat';
+        imageUrl = conv['image_url']?.toString() ?? '';
+      } else {
+        // Direct message - find the other participant
+        final participants = conv['participants'] as List<dynamic>?;
+        if (participants != null && participants.isNotEmpty) {
+          // Find the participant that is not the current user
+          dynamic otherParticipant;
+          try {
+            otherParticipant = participants.firstWhere(
+              (p) {
+                final participantUserId = p['user_id']?.toString();
+                return participantUserId != null && 
+                       participantUserId != _currentUserId;
+              },
+            );
+          } catch (e) {
+            // If not found, use the first participant as fallback
+            otherParticipant = participants.isNotEmpty ? participants[0] : null;
+          }
+          
+          if (otherParticipant != null) {
+            name = otherParticipant['full_name']?.toString() ?? 
+                   otherParticipant['username']?.toString() ?? 
+                   'Unknown';
+            imageUrl = otherParticipant['profile_image_url']?.toString() ?? '';
+          } else {
+            name = 'Unknown';
+            imageUrl = '';
+          }
+        } else {
+          name = 'Unknown';
+          imageUrl = '';
+        }
+      }
+      
+      // Check if someone is typing
+      final typingInfo = typingIndicators?[conversationId];
+      final typingUserName = typingInfo?['user_name'] as String?;
+      
       final lastMessage = conv['last_message'];
-      final message = lastMessage != null 
-          ? '${lastMessage['sender']?['full_name'] ?? ''}: ${lastMessage['content'] ?? ''}'
-          : 'No messages yet';
+      String message;
+      if (typingUserName != null) {
+        message = '$typingUserName is typing...';
+      } else if (lastMessage != null) {
+        message = '${lastMessage['sender']?['full_name'] ?? ''}: ${lastMessage['content'] ?? ''}';
+      } else {
+        message = 'No messages yet';
+      }
+      
       final lastMessageAt = lastMessage?['created_at'];
       final time = lastMessageAt != null 
           ? _formatTime(lastMessageAt)
@@ -165,6 +222,7 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
         imageUrl: imageUrl,
         isUnread: unreadCount > 0,
         isGroup: isGroup,
+        typingUserName: typingUserName,
         onTap: () => context.go(
           '/chat/$conversationId',
           extra: {
@@ -207,11 +265,129 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
   @override
   void dispose() {
     _tabController.dispose();
+    _wsSubscription?.cancel();
     super.dispose();
   }
 
-  List<ChatItem> _getFilteredChats(int tabIndex, List<dynamic> conversations) {
-    final allChats = _convertConversationsToChatItems(conversations);
+  Future<void> _setupWebSocket(List<dynamic> conversations) async {
+    try {
+      // Store bloc reference if not already stored
+      if (_conversationBloc == null && mounted) {
+        _conversationBloc = context.read<ConversationBloc>();
+      }
+
+      // Get current user ID if not already stored
+      if (_currentUserId == null && mounted) {
+        try {
+          final authBloc = context.read<AuthBloc>();
+          if (authBloc.state is AuthAuthenticated) {
+            final authState = authBloc.state as AuthAuthenticated;
+            _currentUserId = authState.user.id;
+          }
+        } catch (e) {
+          debugPrint('⚠️ Could not get current user ID: $e');
+        }
+      }
+
+      // Connect to WebSocket if not already connected
+      if (!_webSocketService.isConnected) {
+        await _webSocketService.connect();
+      }
+
+      // Set up listener if not already set up
+      if (_wsSubscription == null) {
+        _wsSubscription = _webSocketService.messageStream.listen((wsMessage) {
+          if (!mounted || _conversationBloc == null) return;
+
+          // Handle connection events
+          if (wsMessage.event == WebSocketEventType.connected) {
+            debugPrint('✅ WebSocket: Connection established in ChatScreen');
+            // Resubscribe to all conversations when reconnected
+            Future.delayed(const Duration(milliseconds: 500), () {
+              if (mounted && _webSocketService.isConnected) {
+                final state = _conversationBloc!.state;
+                if (state is ConversationLoaded) {
+                  _setupWebSocket(state.conversations);
+                }
+              }
+            });
+            return;
+          }
+
+          // Handle subscription confirmation
+          if (wsMessage.event == WebSocketEventType.subscribed) {
+            debugPrint('✅ WebSocket: Subscription confirmed for ${wsMessage.conversationId}');
+            return;
+          }
+
+          // Handle pong (heartbeat response) - no action needed
+          if (wsMessage.event == WebSocketEventType.pong) {
+            return;
+          }
+
+          if (wsMessage.event == WebSocketEventType.disconnected ||
+              wsMessage.event == WebSocketEventType.error) {
+            debugPrint('⚠️ WebSocket: ${wsMessage.event} - Connection will be re-established');
+            // Don't process messages when disconnected/error
+            return;
+          }
+
+          final conversationId = wsMessage.conversationId;
+          if (conversationId == null) return;
+
+          switch (wsMessage.event) {
+            case WebSocketEventType.messageNew:
+              // Update conversation with new message
+              if (wsMessage.data != null) {
+                _conversationBloc!.add(MessageReceivedInConversation(
+                  conversationId: conversationId,
+                  message: wsMessage.data!,
+                ));
+              }
+              break;
+
+            case WebSocketEventType.typing:
+              // Update typing indicator
+              if (wsMessage.data != null) {
+                final userId = wsMessage.data!['user_id']?.toString();
+                final userName = wsMessage.data!['user_name']?.toString() ?? 'Someone';
+                final isTyping = wsMessage.data!['is_typing'] as bool? ?? false;
+
+                if (userId != null) {
+                  _conversationBloc!.add(TypingUpdateInConversation(
+                    conversationId: conversationId,
+                    userId: userId,
+                    userName: userName,
+                    isTyping: isTyping,
+                  ));
+                }
+              }
+              break;
+
+            default:
+              break;
+          }
+        });
+      }
+
+      // Subscribe to all conversations
+      for (final conversation in conversations) {
+        final conversationId = conversation['id']?.toString();
+        if (conversationId != null) {
+          await _webSocketService.subscribeToConversation(conversationId);
+        }
+      }
+    } catch (e) {
+      debugPrint('❌ Error setting up WebSocket in ChatScreen: $e');
+    }
+  }
+
+  List<ChatItem> _getFilteredChats(
+    int tabIndex,
+    List<dynamic> conversations,
+    Map<String, Map<String, dynamic>?>? typingIndicators,
+  ) {
+    final allChats = _convertConversationsToChatItems(conversations, typingIndicators);
     switch (tabIndex) {
       case 0: // All
         return allChats;
@@ -248,7 +424,8 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
     }
     
     final conversations = state is ConversationLoaded ? state.conversations : [];
-    final filteredChats = _getFilteredChats(tabIndex, conversations);
+    final typingIndicators = state is ConversationLoaded ? state.typingIndicators : null;
+    final filteredChats = _getFilteredChats(tabIndex, conversations, typingIndicators);
 
     if (filteredChats.isEmpty) {
       return Center(
@@ -300,6 +477,7 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
           time: chat.time,
           imageUrl: chat.imageUrl,
           isUnread: chat.isUnread,
+          typingUserName: chat.typingUserName,
           onTap: chat.onTap,
         );
       },
@@ -307,7 +485,9 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
   }
 
   void _handleSearch(List<dynamic> conversations) {
-    final chatItems = _convertConversationsToChatItems(conversations);
+    final state = context.read<ConversationBloc>().state;
+    final typingIndicators = state is ConversationLoaded ? state.typingIndicators : null;
+    final chatItems = _convertConversationsToChatItems(conversations, typingIndicators);
     showSearch(
       context: context,
       delegate: _ChatSearchDelegate(chatItems),
@@ -426,7 +606,31 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
             ),
           ],
         ),
-        body: BlocBuilder<ConversationBloc, ConversationState>(
+        body: BlocConsumer<ConversationBloc, ConversationState>(
+          listener: (context, state) {
+            // Update bloc reference
+            if (_conversationBloc == null && mounted) {
+              _conversationBloc = context.read<ConversationBloc>();
+            }
+            
+            // Get current user ID if not already stored
+            if (_currentUserId == null && mounted) {
+              try {
+                final authBloc = context.read<AuthBloc>();
+                if (authBloc.state is AuthAuthenticated) {
+                  final authState = authBloc.state as AuthAuthenticated;
+                  _currentUserId = authState.user.id;
+                }
+              } catch (e) {
+                debugPrint('⚠️ Could not get current user ID: $e');
+              }
+            }
+            
+            // Set up WebSocket when conversations are loaded
+            if (state is ConversationLoaded) {
+              _setupWebSocket(state.conversations);
+            }
+          },
           builder: (context, state) {
             return TabBarView(
               controller: _tabController,

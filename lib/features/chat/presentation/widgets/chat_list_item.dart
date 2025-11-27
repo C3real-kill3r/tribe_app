@@ -7,6 +7,7 @@ class ChatListItem extends StatelessWidget {
   final String imageUrl;
   final bool isUnread;
   final VoidCallback onTap;
+  final String? typingUserName;
 
   const ChatListItem({
     super.key,
@@ -16,6 +17,7 @@ class ChatListItem extends StatelessWidget {
     required this.imageUrl,
     this.isUnread = false,
     required this.onTap,
+    this.typingUserName,
   });
 
   @override
@@ -38,8 +40,13 @@ class ChatListItem extends StatelessWidget {
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: isUnread ? Colors.white : Colors.grey,
-              fontWeight: isUnread ? FontWeight.bold : FontWeight.normal,
+              color: typingUserName != null
+                  ? Theme.of(context).colorScheme.primary
+                  : (isUnread ? Colors.white : Colors.grey),
+              fontWeight: typingUserName != null || isUnread
+                  ? FontWeight.bold
+                  : FontWeight.normal,
+              fontStyle: typingUserName != null ? FontStyle.italic : FontStyle.normal,
             ),
       ),
       trailing: Column(

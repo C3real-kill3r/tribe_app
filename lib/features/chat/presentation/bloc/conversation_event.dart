@@ -21,3 +21,33 @@ class RefreshConversations extends ConversationEvent {
   const RefreshConversations();
 }
 
+class MessageReceivedInConversation extends ConversationEvent {
+  final String conversationId;
+  final Map<String, dynamic> message;
+
+  const MessageReceivedInConversation({
+    required this.conversationId,
+    required this.message,
+  });
+
+  @override
+  List<Object> get props => [conversationId, message];
+}
+
+class TypingUpdateInConversation extends ConversationEvent {
+  final String conversationId;
+  final String userId;
+  final String userName;
+  final bool isTyping;
+
+  const TypingUpdateInConversation({
+    required this.conversationId,
+    required this.userId,
+    required this.userName,
+    required this.isTyping,
+  });
+
+  @override
+  List<Object> get props => [conversationId, userId, userName, isTyping];
+}
+
