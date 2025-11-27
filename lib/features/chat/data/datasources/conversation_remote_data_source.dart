@@ -7,6 +7,7 @@ abstract class ConversationRemoteDataSource {
     int page = 1,
     int limit = 20,
   });
+  Future<Map<String, dynamic>> getConversationDetails(String conversationId);
   Future<Map<String, dynamic>> getConversationMessages(
     String conversationId, {
     int page = 1,
@@ -53,6 +54,32 @@ class ConversationRemoteDataSourceImpl implements ConversationRemoteDataSource {
       }
     } catch (e) {
       throw Exception('Failed to fetch conversations: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> getConversationDetails(String conversationId) async {
+    try {
+      final response = await apiClient.get(
+        '${ApiConfig.conversationsEndpoint}/$conversationId',
+      );
+
+      if (response.statusCode == 200) {
+        return response.data as Map<String, dynamic>;
+      } else {
+        throw Exception('Failed to fetch conversation details: ${response.statusMessage}');
+      }
+    } on DioException catch (e) {
+      if (e.response != null) {
+        final errorMessage = e.response?.data?['detail'] ?? 
+                           e.response?.data?['message'] ?? 
+                           'Failed to fetch conversation details';
+        throw Exception(errorMessage);
+      } else {
+        throw Exception('Network error: ${e.message}');
+      }
+    } catch (e) {
+      throw Exception('Failed to fetch conversation details: ${e.toString()}');
     }
   }
 

@@ -44,3 +44,16 @@ class RefreshMessages extends MessageEvent {
   List<Object> get props => [conversationId];
 }
 
+class MessageReceived extends MessageEvent {
+  final String conversationId;
+  final Map<String, dynamic> message;
+
+  const MessageReceived({
+    required this.conversationId,
+    required this.message,
+  });
+
+  @override
+  List<Object> get props => [conversationId, message];
+}
+

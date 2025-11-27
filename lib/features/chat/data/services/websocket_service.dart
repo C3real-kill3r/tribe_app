@@ -65,6 +65,7 @@ class WebSocketService {
   Timer? _reconnectTimer;
   Timer? _heartbeatTimer;
   final Set<String> _subscribedConversations = {};
+  Completer<void>? _connectionCompleter;
 
   Stream<WebSocketMessage> get messageStream => 
       _messageController?.stream ?? const Stream.empty();
@@ -75,6 +76,13 @@ class WebSocketService {
     if (_isConnected && _channel != null) {
       return;
     }
+
+    // If already connecting, wait for that connection
+    if (_connectionCompleter != null && !_connectionCompleter!.isCompleted) {
+      return _connectionCompleter!.future;
+    }
+
+    _connectionCompleter = Completer<void>();
 
     try {
       final token = await _tokenStorage.getAccessToken();
@@ -88,6 +96,7 @@ class WebSocketService {
           .replaceFirst('https://', 'wss://');
       final wsUrl = '$baseUrl/ws?token=$token';
 
+      print('🔌 WebSocket: Connecting to $wsUrl');
       _channel = WebSocketChannel.connect(Uri.parse(wsUrl));
       _messageController ??= StreamController<WebSocketMessage>.broadcast();
 
@@ -96,11 +105,21 @@ class WebSocketService {
           try {
             final json = jsonDecode(message as String) as Map<String, dynamic>;
             final wsMessage = WebSocketMessage.fromJson(json);
+            print('📨 WebSocket: Received message - ${wsMessage.event}');
             _messageController?.add(wsMessage);
+            
+            // Mark as connected when we receive the first message
+            if (!_isConnected && wsMessage.event == WebSocketEventType.connected) {
+              _isConnected = true;
+              _connectionCompleter?.complete();
+              print('✅ WebSocket: Connection established');
+            }
           } catch (e) {
+            print('❌ WebSocket: Error parsing message: $e');
             // Handle non-JSON messages or connection events
             if (message.toString().contains('connected')) {
               _isConnected = true;
+              _connectionCompleter?.complete();
               _messageController?.add(WebSocketMessage(
                 event: WebSocketEventType.connected,
               ));
@@ -108,7 +127,9 @@ class WebSocketService {
           }
         },
         onError: (error) {
+          print('❌ WebSocket: Connection error: $error');
           _isConnected = false;
+          _connectionCompleter?.completeError(error);
           _messageController?.add(WebSocketMessage(
             event: WebSocketEventType.error,
             data: {'error': error.toString()},
@@ -116,7 +137,9 @@ class WebSocketService {
           _scheduleReconnect();
         },
         onDone: () {
+          print('🔌 WebSocket: Connection closed');
           _isConnected = false;
+          _connectionCompleter?.complete();
           _messageController?.add(WebSocketMessage(
             event: WebSocketEventType.disconnected,
           ));
@@ -125,15 +148,42 @@ class WebSocketService {
         cancelOnError: false,
       );
 
-      _isConnected = true;
       _startHeartbeat();
       
-      // Resubscribe to all conversations
-      for (final conversationId in _subscribedConversations) {
-        subscribeToConversation(conversationId);
+      // Wait for connection confirmation with timeout
+      try {
+        await _connectionCompleter!.future.timeout(
+          const Duration(seconds: 5),
+          onTimeout: () {
+            // If timeout, assume connection is established (might have missed the event)
+            if (!_connectionCompleter!.isCompleted) {
+              _isConnected = true;
+              _connectionCompleter?.complete();
+              print('✅ WebSocket: Connection assumed established (timeout)');
+            }
+          },
+        );
+      } catch (e) {
+        print('⚠️ WebSocket: Connection confirmation timeout or error: $e');
+        // Still mark as connected if channel exists
+        if (_channel != null) {
+          _isConnected = true;
+          if (!_connectionCompleter!.isCompleted) {
+            _connectionCompleter?.complete();
+          }
+        }
+      }
+      
+      // Resubscribe to all conversations after connection is established
+      if (_isConnected) {
+        for (final conversationId in _subscribedConversations) {
+          subscribeToConversation(conversationId);
+        }
       }
     } catch (e) {
+      print('❌ WebSocket: Connection failed: $e');
       _isConnected = false;
+      _connectionCompleter?.completeError(e);
       _messageController?.add(WebSocketMessage(
         event: WebSocketEventType.error,
         data: {'error': e.toString()},
@@ -142,19 +192,24 @@ class WebSocketService {
     }
   }
 
-  void subscribeToConversation(String conversationId) {
+  Future<void> subscribeToConversation(String conversationId) async {
+    _subscribedConversations.add(conversationId);
+    
     if (!_isConnected || _channel == null) {
-      _subscribedConversations.add(conversationId);
-      connect(); // Will resubscribe after connection
-      return;
+      print('📡 WebSocket: Not connected, connecting first...');
+      await connect(); // Wait for connection
     }
 
-    _subscribedConversations.add(conversationId);
-    _send({
-      'event': 'subscribe',
-      'channel': 'conversation',
-      'conversation_id': conversationId,
-    });
+    if (_isConnected && _channel != null) {
+      print('📡 WebSocket: Subscribing to conversation $conversationId');
+      _send({
+        'event': 'subscribe',
+        'channel': 'conversation',
+        'conversation_id': conversationId,
+      });
+    } else {
+      print('⚠️ WebSocket: Still not connected after connect() call');
+    }
   }
 
   void unsubscribeFromConversation(String conversationId) {
@@ -188,11 +243,18 @@ class WebSocketService {
   }
 
   void _send(Map<String, dynamic> message) {
-    if (_channel == null) return;
+    if (_channel == null || !_isConnected) {
+      print('⚠️ WebSocket: Cannot send - channel is null or not connected');
+      return;
+    }
     try {
-      _channel!.sink.add(jsonEncode(message));
+      final messageStr = jsonEncode(message);
+      print('📤 WebSocket: Sending - ${message['event']}');
+      _channel!.sink.add(messageStr);
     } catch (e) {
-      // Handle send error
+      print('❌ WebSocket: Error sending message: $e');
+      // Mark as disconnected if send fails
+      _isConnected = false;
     }
   }
 

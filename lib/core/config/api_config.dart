@@ -3,12 +3,21 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class ApiConfig {
   // Get base URL from environment variables
   // Falls back to default if not set in .env file
+  // Automatically adds http:// scheme if missing
   static String get baseUrl {
-    return dotenv.env['API_BASE_URL'] ?? 
-           const String.fromEnvironment(
-             'API_BASE_URL',
-             defaultValue: 'http://localhost:8000',
-           );
+    final url = dotenv.env['API_BASE_URL'] ?? 
+                const String.fromEnvironment(
+                  'API_BASE_URL',
+                  defaultValue: 'http://localhost:8000',
+                );
+    
+    // Ensure URL has a scheme (http:// or https://)
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      // Default to http:// for local/development IPs
+      return 'http://$url';
+    }
+    
+    return url;
   }
   
   // Get API version from environment variables

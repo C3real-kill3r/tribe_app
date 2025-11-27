@@ -2,10 +2,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:tribe/core/di/service_locator.dart' as di;
+import 'package:tribe/core/services/timezone_service.dart';
 import 'package:tribe/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:tribe/features/chat/data/datasources/ai_coach_service.dart';
+import 'package:tribe/features/chat/data/datasources/conversation_remote_data_source.dart';
 import 'package:tribe/features/chat/data/services/websocket_service.dart';
 import 'package:tribe/features/chat/presentation/bloc/message_bloc.dart';
 import 'package:tribe/features/chat/presentation/bloc/message_event.dart';
@@ -35,10 +36,13 @@ class _ConversationScreenState extends State<ConversationScreen> {
   final AICoachService _aiCoachService = AICoachService();
   final List<Map<String, dynamic>> _legacyMessages = [];
   final WebSocketService _webSocketService = WebSocketService();
+  final TimezoneService _timezoneService = TimezoneService();
   StreamSubscription<WebSocketMessage>? _wsSubscription;
   Timer? _typingTimer;
   Set<String> _typingUsers = {};
   bool _isUserTyping = false;
+  Map<String, bool> _participantOnlineStatus = {}; // Map of user_id -> is_online
+  MessageBloc? _messageBloc; // Store reference to MessageBloc for real conversations
 
   bool get _isAICoach => widget.chatId == 'ai-coach';
   bool get _isGroupChat => widget.isGroup ?? widget.chatId.startsWith('group-');
@@ -77,6 +81,15 @@ class _ConversationScreenState extends State<ConversationScreen> {
     if (_isGroupChat) {
       return 'Group chat';
     }
+    
+    // Check if any participant is online
+    if (_participantOnlineStatus.isNotEmpty) {
+      final hasOnlineUser = _participantOnlineStatus.values.any((isOnline) => isOnline);
+      if (hasOnlineUser) {
+        return 'Online';
+      }
+    }
+    
     return 'Active now';
   }
 
@@ -103,8 +116,11 @@ class _ConversationScreenState extends State<ConversationScreen> {
     
     for (var msg in backendMessages) {
       final createdAt = msg['created_at'] as String?;
-      final messageDate = createdAt != null ? DateTime.parse(createdAt) : null;
-      final dateStr = messageDate != null ? _formatDate(messageDate) : null;
+      // Parse UTC string and convert to local time
+      final messageDate = createdAt != null 
+          ? _timezoneService.parseUtcToLocal(createdAt) 
+          : null;
+      final dateStr = messageDate != null ? _timezoneService.formatDate(messageDate) : null;
       
       // Add date separator if date changed
       if (dateStr != null && dateStr != lastDate) {
@@ -116,41 +132,35 @@ class _ConversationScreenState extends State<ConversationScreen> {
       }
       
       final senderId = msg['sender']?['id']?.toString();
-      final isMe = senderId == currentUserId;
+      final isMe = senderId == currentUserId || msg['is_optimistic'] == true;
+      
+      // Skip optimistic messages that have been replaced by real ones
+      if (msg['is_optimistic'] == true && msg['id']?.toString().startsWith('temp_') == true) {
+        // Check if we have a real message with similar content and recent timestamp
+        final hasRealMessage = backendMessages.any((m) => 
+          m['id']?.toString().startsWith('temp_') != true &&
+          m['content'] == msg['content'] &&
+          m['created_at'] != null
+        );
+        if (hasRealMessage) {
+          continue; // Skip optimistic message if real one exists
+        }
+      }
       
       converted.add({
         'id': msg['id']?.toString(),
         'text': msg['content'] ?? '',
         'isMe': isMe,
-        'time': messageDate != null ? _formatTime(messageDate) : 'Now',
-        'user': msg['sender']?['full_name'] ?? 'Unknown',
+        'time': messageDate != null ? _timezoneService.formatTime(messageDate) : 'Now',
+        'user': msg['sender']?['full_name'] ?? (isMe ? 'You' : 'Unknown'),
         'avatar': msg['sender']?['profile_image_url'] ?? '',
         'type': msg['message_type'] ?? 'text',
         'created_at': createdAt,
+        'is_optimistic': msg['is_optimistic'] ?? false,
       });
     }
     
     return converted;
-  }
-
-  String _formatDate(DateTime date) {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final messageDate = DateTime(date.year, date.month, date.day);
-    
-    if (messageDate == today) {
-      return 'Today';
-    } else if (messageDate == today.subtract(const Duration(days: 1))) {
-      return 'Yesterday';
-    } else if (now.difference(date).inDays < 7) {
-      return DateFormat('EEEE').format(date);
-    } else {
-      return DateFormat('MMM d, yyyy').format(date);
-    }
-  }
-
-  String _formatTime(DateTime date) {
-    return DateFormat('h:mm a').format(date);
   }
 
   void _loadLegacyMessages() {
@@ -328,11 +338,28 @@ class _ConversationScreenState extends State<ConversationScreen> {
     } else if (_isRealConversation) {
       // Send real message to backend (this persists to DB)
       if (mounted) {
-        context.read<MessageBloc>().add(SendMessage(
-          conversationId: widget.chatId,
-          content: userMessage,
-        ));
-        // Scroll will happen when new message arrives via WebSocket
+        try {
+          // Use stored bloc reference or get from service locator
+          final messageBloc = _messageBloc ?? di.sl<MessageBloc>();
+          messageBloc.add(SendMessage(
+            conversationId: widget.chatId,
+            content: userMessage,
+          ));
+          // Optimistic update will show message immediately
+          // WebSocket will confirm and update with server response
+          _scrollToBottom();
+        } catch (e) {
+          debugPrint('Error sending message: $e');
+          // Show error to user
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Failed to send message: ${e.toString()}'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        }
       }
     } else {
       // Legacy hardcoded chat handling
@@ -358,6 +385,30 @@ class _ConversationScreenState extends State<ConversationScreen> {
     } else {
       _setupWebSocket();
       _messageController.addListener(_onTextChanged);
+      _loadConversationDetails();
+    }
+  }
+
+  Future<void> _loadConversationDetails() async {
+    try {
+      final dataSource = di.sl<ConversationRemoteDataSource>();
+      final details = await dataSource.getConversationDetails(widget.chatId);
+      
+      if (mounted && details['participants'] != null) {
+        setState(() {
+          final participants = details['participants'] as List<dynamic>;
+          for (var participant in participants) {
+            final userId = participant['user_id']?.toString();
+            final isOnline = participant['is_online'] as bool?;
+            if (userId != null && isOnline != null) {
+              _participantOnlineStatus[userId] = isOnline;
+            }
+          }
+        });
+      }
+    } catch (e) {
+      // Silently fail - online status is not critical
+      debugPrint('Failed to load conversation details: $e');
     }
   }
 
@@ -374,28 +425,57 @@ class _ConversationScreenState extends State<ConversationScreen> {
     super.dispose();
   }
 
-  void _setupWebSocket() {
-    // Connect to WebSocket
-    _webSocketService.connect();
+  Future<void> _setupWebSocket() async {
+    debugPrint('🔌 Setting up WebSocket for conversation ${widget.chatId}');
     
-    // Subscribe to conversation
-    _webSocketService.subscribeToConversation(widget.chatId);
+    // Connect to WebSocket and wait for connection
+    try {
+      await _webSocketService.connect();
+      debugPrint('✅ WebSocket connected');
+    } catch (e) {
+      debugPrint('❌ WebSocket connection failed: $e');
+      return;
+    }
+    
+    // Subscribe to conversation (will wait for connection if needed)
+    await _webSocketService.subscribeToConversation(widget.chatId);
+    debugPrint('📡 Subscribed to conversation ${widget.chatId}');
+    
+    // Send presence update
+    _webSocketService.sendPresence('online');
     
     // Listen to WebSocket messages
     _wsSubscription = _webSocketService.messageStream.listen((wsMessage) {
       if (!mounted) return;
       
-      if (wsMessage.conversationId != widget.chatId) return;
+      debugPrint('📨 Received WebSocket event: ${wsMessage.event} for conversation ${wsMessage.conversationId}');
+      
+      // Handle connection events
+      if (wsMessage.event == WebSocketEventType.connected) {
+        debugPrint('✅ WebSocket connection confirmed');
+        // Send presence update on successful connection
+        _webSocketService.sendPresence('online');
+        // Resubscribe after connection
+        _webSocketService.subscribeToConversation(widget.chatId);
+        return;
+      }
+      
+      if (wsMessage.conversationId != widget.chatId && 
+          wsMessage.event != WebSocketEventType.presence) {
+        debugPrint('⏭️ Skipping message for different conversation');
+        return;
+      }
       
       switch (wsMessage.event) {
         case WebSocketEventType.messageNew:
+          debugPrint('💬 New message received via WebSocket');
           _handleNewMessage(wsMessage.data);
           break;
         case WebSocketEventType.typing:
           _handleTypingIndicator(wsMessage.data);
           break;
         case WebSocketEventType.presence:
-          // Handle presence updates if needed
+          _handlePresenceUpdate(wsMessage.data);
           break;
         default:
           break;
@@ -403,16 +483,50 @@ class _ConversationScreenState extends State<ConversationScreen> {
     });
   }
 
+  void _handlePresenceUpdate(Map<String, dynamic>? data) {
+    // Handle presence updates for online status
+    if (data != null) {
+      final userId = data['user_id']?.toString();
+      final isOnline = data['is_online'] as bool?;
+      if (userId != null && isOnline != null) {
+        setState(() {
+          _participantOnlineStatus[userId] = isOnline;
+        });
+      }
+    }
+  }
+
   void _handleNewMessage(Map<String, dynamic>? data) {
     if (data == null) return;
     
-    // Add new message to the list and refresh
-    context.read<MessageBloc>().add(RefreshMessages(conversationId: widget.chatId));
-    
-    // Scroll to bottom after a short delay to allow UI to update
-    Future.delayed(const Duration(milliseconds: 100), () {
-      _scrollToBottom();
-    });
+    // Add message directly to bloc for real-time updates
+    if (mounted) {
+      try {
+        // Use stored bloc reference or get from service locator
+        final messageBloc = _messageBloc ?? di.sl<MessageBloc>();
+        // Use MessageReceived event to add message directly to state
+        messageBloc.add(MessageReceived(
+          conversationId: widget.chatId,
+          message: data,
+        ));
+        
+        // Scroll to bottom after a short delay to allow UI to update
+        Future.delayed(const Duration(milliseconds: 100), () {
+          if (mounted) {
+            _scrollToBottom();
+          }
+        });
+      } catch (e) {
+        debugPrint('Error handling new message: $e');
+        // Fallback to refresh if direct add fails
+        try {
+          final messageBloc = _messageBloc ?? di.sl<MessageBloc>();
+          messageBloc.add(RefreshMessages(conversationId: widget.chatId));
+        } catch (refreshError) {
+          debugPrint('Error refreshing messages: $refreshError');
+        }
+      }
+    }
   }
 
   void _handleTypingIndicator(Map<String, dynamic>? data) {
@@ -460,8 +574,15 @@ class _ConversationScreenState extends State<ConversationScreen> {
     // For real conversations, use MessageBloc; otherwise use legacy hardcoded messages
     if (_isRealConversation) {
       return BlocProvider(
-        create: (context) => di.sl<MessageBloc>()..add(LoadMessages(conversationId: widget.chatId)),
-        child: _buildConversationUI(context),
+        create: (context) {
+          // Store bloc reference for use in callbacks
+          final bloc = di.sl<MessageBloc>()..add(LoadMessages(conversationId: widget.chatId));
+          _messageBloc = bloc;
+          return bloc;
+        },
+        child: Builder(
+          builder: (context) => _buildConversationUI(context),
+        ),
       );
     } else {
       // Legacy hardcoded messages for AI coach and old chat IDs
@@ -470,10 +591,28 @@ class _ConversationScreenState extends State<ConversationScreen> {
   }
 
   Widget _buildConversationUI(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
+    return BlocListener<MessageBloc, MessageState>(
+      listener: (context, state) {
+        if (state is MessageError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Error: ${state.message}'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        } else if (state is MessageLoaded) {
+          // Scroll to bottom when messages are loaded
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (_scrollController.hasClients) {
+              _scrollToBottom(smooth: false);
+            }
+          });
+        }
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: Column(
+            children: [
             // Custom Header
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -522,7 +661,9 @@ class _ConversationScreenState extends State<ConversationScreen> {
                             width: 12,
                             height: 12,
                             decoration: BoxDecoration(
-                              color: Colors.green,
+                              color: _getChatSubtitle() == 'Online' 
+                                  ? Colors.green 
+                                  : Colors.grey,
                               shape: BoxShape.circle,
                               border: Border.all(
                                 color: Theme.of(context).scaffoldBackgroundColor,
@@ -585,7 +726,12 @@ class _ConversationScreenState extends State<ConversationScreen> {
                           const SizedBox(height: 16),
                           ElevatedButton(
                             onPressed: () {
-                              context.read<MessageBloc>().add(LoadMessages(conversationId: widget.chatId));
+                              try {
+                                final messageBloc = _messageBloc ?? di.sl<MessageBloc>();
+                                messageBloc.add(LoadMessages(conversationId: widget.chatId));
+                              } catch (e) {
+                                debugPrint('Error retrying load messages: $e');
+                              }
                             },
                             child: const Text('Retry'),
                           ),
@@ -746,6 +892,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
             ),
           ],
         ),
+      ),
       ),
     );
   }

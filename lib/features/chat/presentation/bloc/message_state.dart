@@ -22,6 +22,18 @@ class MessageLoaded extends MessageState {
     required this.conversationId,
   });
 
+  MessageLoaded copyWith({
+    List<dynamic>? messages,
+    Map<String, dynamic>? pagination,
+    String? conversationId,
+  }) {
+    return MessageLoaded(
+      messages: messages ?? this.messages,
+      pagination: pagination ?? this.pagination,
+      conversationId: conversationId ?? this.conversationId,
+    );
+  }
+
   @override
   List<Object> get props => [messages, pagination ?? {}, conversationId];
 }
