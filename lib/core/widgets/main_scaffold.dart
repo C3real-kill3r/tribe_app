@@ -33,7 +33,7 @@ class MainScaffold extends StatelessWidget {
       extendBody: true,
       bottomNavigationBar: SafeArea(
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           decoration: BoxDecoration(
             color: surfaceColor,
             borderRadius: BorderRadius.circular(28),
@@ -61,9 +61,9 @@ class MainScaffold extends StatelessWidget {
                 onDestinationSelected: _goBranch,
                 backgroundColor: Colors.transparent,
                 elevation: 0,
-                indicatorColor: accentColor.withOpacity(0.2),
-                height: 70,
-                labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+                indicatorColor: Colors.transparent,
+                height: 56,
+                labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
                 indicatorShape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -132,6 +132,19 @@ class MainScaffold extends StatelessWidget {
                       color: accentColor,
                     ),
                     label: 'Profile',
+                  ),
+                  NavigationDestination(
+                    icon: Icon(
+                      Icons.settings_outlined,
+                      size: 24,
+                      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                    ),
+                    selectedIcon: Icon(
+                      Icons.settings,
+                      size: 24,
+                      color: accentColor,
+                    ),
+                    label: 'Settings',
                   ),
                 ],
               ),

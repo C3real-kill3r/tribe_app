@@ -1,30 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tribe/core/di/service_locator.dart' as di;
+import 'package:tribe/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:tribe/features/user/presentation/bloc/user_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(context),
-              const SizedBox(height: 24),
-              _buildWelcomeCard(context),
-              const SizedBox(height: 24),
-              _buildFriendsOnline(context),
-              const SizedBox(height: 24),
-              _buildQuickActions(context),
-              const SizedBox(height: 24),
-              _buildRecentActivity(context),
-              const SizedBox(height: 80), // Bottom padding for nav bar
-            ],
+    return BlocProvider(
+      create: (context) => di.sl<UserBloc>()..add(LoadUserProfile()),
+      child: Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildHeader(context),
+                const SizedBox(height: 24),
+                _buildWelcomeCard(context),
+                const SizedBox(height: 24),
+                _buildFriendsOnline(context),
+                const SizedBox(height: 24),
+                _buildQuickActions(context),
+                const SizedBox(height: 24),
+                _buildRecentActivity(context),
+                const SizedBox(height: 80), // Bottom padding for nav bar
+              ],
+            ),
           ),
         ),
       ),
@@ -32,90 +39,110 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          width: 48,
-          height: 48,
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            image: DecorationImage(
-              image: NetworkImage(
-                  'https://lh3.googleusercontent.com/aida-public/AB6AXuCGqbXriBn-se1qGz9Oh6Bog6YzqldQGT_ZqwMUdYgnMoXxVvAKyUv-UzdjW6ZHzAxCzOwcD1zYuXXIb8KeWZY4reevGU4bAO82yE-5XrKv0BE4csYF03QIGW5vF2HQeo3WFXSgj-1Cdv-U9e6oCuy0TTdCoho6fTjrQDVt60L6ATB67lP3gjYcJIQEKsqPKFerdDnHXp0jOxIpKKmlWosfqRml4P0HkH-Pwepbf-eOOUJQFexO9wH917o6vkH8Rmay2HNV3GmwxFk'),
-              fit: BoxFit.cover,
+    return BlocBuilder<UserBloc, UserState>(
+      builder: (context, state) {
+        final profileImageUrl =
+            state is UserLoaded ? state.user.profileImageUrl : null;
+
+        return Row(
+          children: [
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: profileImageUrl != null && profileImageUrl.isNotEmpty
+                    ? DecorationImage(
+                        image: NetworkImage(profileImageUrl),
+                        fit: BoxFit.cover,
+                      )
+                    : null,
+                color: profileImageUrl == null ? Colors.grey[300] : null,
+              ),
+              child: profileImageUrl == null
+                  ? const Icon(Icons.person, size: 24)
+                  : null,
             ),
-          ),
-        ),
-        Expanded(
-          child: Text(
-            'Dashboard',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-        ),
-        Container(
-          width: 48,
-          height: 48,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: Colors.grey.withOpacity(0.2)),
-          ),
-          child: IconButton(
-            icon: const Icon(Icons.notifications_outlined),
-            onPressed: () => context.push('/notifications'),
-            color: Theme.of(context).textTheme.bodyLarge?.color,
-          ),
-        ),
-      ],
+            Expanded(
+              child: Text(
+                'Dashboard',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ),
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.grey.withOpacity(0.2)),
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.notifications_outlined),
+                onPressed: () => context.push('/notifications'),
+                color: Theme.of(context).textTheme.bodyLarge?.color,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
   Widget _buildWelcomeCard(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Theme.of(context).colorScheme.primary,
-            Theme.of(context).colorScheme.primary.withOpacity(0.7),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
-            blurRadius: 12,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Hello, Brian Okuku!',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+    return BlocBuilder<UserBloc, UserState>(
+      builder: (context, state) {
+        final userName = state is UserLoaded
+            ? state.user.fullName
+            : (state is UserLoading ? 'Loading...' : 'User');
+
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Theme.of(context).colorScheme.primary,
+                Theme.of(context).colorScheme.primary.withOpacity(0.7),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+                blurRadius: 12,
+                offset: const Offset(0, 6),
+              ),
+            ],
           ),
-          const SizedBox(height: 8),
-          Text(
-            'Ready to achieve your goals and make memories with friends today?',
-            style: TextStyle(
-              color: Colors.white.withOpacity(0.9),
-              fontSize: 14,
-              height: 1.5,
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Hello, $userName!',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Ready to achieve your goals and make memories with friends today?',
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.9),
+                  fontSize: 14,
+                  height: 1.5,
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 

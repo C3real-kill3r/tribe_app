@@ -10,6 +10,8 @@ import 'package:tribe/features/auth/presentation/pages/splash_screen.dart';
 import 'package:tribe/features/auth/presentation/pages/welcome_page.dart';
 import 'package:tribe/features/chat/presentation/pages/chat_screen.dart';
 import 'package:tribe/features/chat/presentation/pages/conversation_screen.dart';
+import 'package:tribe/features/chat/presentation/pages/select_kin_screen.dart';
+import 'package:tribe/features/chat/presentation/pages/select_group_screen.dart';
 import 'package:tribe/features/home/home_screen.dart';
 import 'package:tribe/features/memories/presentation/pages/memories_screen.dart';
 import 'package:tribe/features/memories/presentation/pages/post_details_page.dart';
@@ -70,11 +72,28 @@ final GoRouter appRouter = GoRouter(
               path: '/chat',
               builder: (context, state) => const ChatScreen(),
               routes: [
+                // Specific routes must come before parameterized routes
+                GoRoute(
+                  path: 'select-kin',
+                  parentNavigatorKey: _rootNavigatorKey,
+                  builder: (context, state) => const SelectKinScreen(),
+                ),
+                GoRoute(
+                  path: 'select-group',
+                  parentNavigatorKey: _rootNavigatorKey,
+                  builder: (context, state) => const SelectGroupScreen(),
+                ),
                 GoRoute(
                   path: ':id',
                   builder: (context, state) {
                     final chatId = state.pathParameters['id']!;
-                    return ConversationScreen(chatId: chatId);
+                    final extra = state.extra as Map<String, dynamic>?;
+                    return ConversationScreen(
+                      chatId: chatId,
+                      chatName: extra?['chatName'] as String?,
+                      chatImageUrl: extra?['chatImageUrl'] as String?,
+                      isGroup: extra?['isGroup'] as bool?,
+                    );
                   },
                 ),
               ],
@@ -145,29 +164,31 @@ final GoRouter appRouter = GoRouter(
             ),
           ],
         ),
-      ],
-    ),
-    // Settings Routes
-    GoRoute(
-      parentNavigatorKey: _rootNavigatorKey,
-      path: '/settings',
-      builder: (context, state) => const SettingsPage(),
-      routes: [
-        GoRoute(
-          path: 'account',
-          builder: (context, state) => const AccountSettingsPage(),
-        ),
-        GoRoute(
-          path: 'appearance',
-          builder: (context, state) => const AppearanceSettingsPage(),
-        ),
-        GoRoute(
-          path: 'privacy',
-          builder: (context, state) => const PrivacySettingsPage(),
-        ),
-        GoRoute(
-          path: 'notifications',
-          builder: (context, state) => const NotificationSettingsPage(),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/settings',
+              builder: (context, state) => const SettingsPage(),
+              routes: [
+                GoRoute(
+                  path: 'account',
+                  builder: (context, state) => const AccountSettingsPage(),
+                ),
+                GoRoute(
+                  path: 'appearance',
+                  builder: (context, state) => const AppearanceSettingsPage(),
+                ),
+                GoRoute(
+                  path: 'privacy',
+                  builder: (context, state) => const PrivacySettingsPage(),
+                ),
+                GoRoute(
+                  path: 'notifications',
+                  builder: (context, state) => const NotificationSettingsPage(),
+                ),
+              ],
+            ),
+          ],
         ),
       ],
     ),

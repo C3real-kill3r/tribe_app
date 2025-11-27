@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:tribe/core/theme/theme_provider.dart';
 
 class AppearanceSettingsPage extends StatefulWidget {
@@ -238,7 +239,7 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
                   value: sliderValue,
                   min: 0,
                   max: 100,
-                  divisions: 100,
+                  divisions: null, // Remove divisions for smooth sliding
                   activeColor: themeProvider.accentColor,
                   onChanged: (value) {
                     final multiplier = themeProvider.sliderToMultiplier(value);
@@ -332,75 +333,96 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
   }
 
   void _showColorPicker(BuildContext context, ThemeProvider themeProvider) {
-    final presetColors = [
-      const Color(0xFFF9A826), // Warm Amber (default)
-      const Color(0xFFE56E51), // Coral
-      const Color(0xFF4CAF50), // Green
-      const Color(0xFF2196F3), // Blue
-      const Color(0xFF9C27B0), // Purple
-      const Color(0xFFF44336), // Red
-      const Color(0xFFFF9800), // Orange
-      const Color(0xFF00BCD4), // Cyan
-      const Color(0xFF795548), // Brown
-      const Color(0xFF607D8B), // Blue Grey
-      const Color(0xFFE91E63), // Pink
-      const Color(0xFF3F51B5), // Indigo
-    ];
-
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Choose Accent Color'),
-        content: SingleChildScrollView(
-          child: Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: presetColors.map((color) {
-              final isSelected = themeProvider.accentColor.value == color.value;
-              return InkWell(
-                onTap: () {
-                  themeProvider.setAccentColor(color);
-                  Navigator.pop(context);
-                },
-                child: Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: color,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: isSelected ? Colors.white : Colors.grey.withOpacity(0.3),
-                      width: isSelected ? 3 : 2,
-                    ),
-                    boxShadow: isSelected
-                        ? [
-                            BoxShadow(
-                              color: color.withOpacity(0.5),
-                              blurRadius: 8,
-                              spreadRadius: 2,
-                            ),
-                          ]
-                        : null,
-                  ),
-                  child: isSelected
-                      ? const Icon(
-                          Icons.check,
-                          color: Colors.white,
-                          size: 24,
-                        )
-                      : null,
-                ),
-              );
-            }).toList(),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-        ],
+      builder: (context) => _ColorPickerDialog(
+        initialColor: themeProvider.accentColor,
+        onColorChanged: (color) {
+          themeProvider.setAccentColor(color);
+        },
       ),
+    );
+  }
+}
+
+class _ColorPickerDialog extends StatefulWidget {
+  final Color initialColor;
+  final ValueChanged<Color> onColorChanged;
+
+  const _ColorPickerDialog({
+    required this.initialColor,
+    required this.onColorChanged,
+  });
+
+  @override
+  State<_ColorPickerDialog> createState() => _ColorPickerDialogState();
+}
+
+class _ColorPickerDialogState extends State<_ColorPickerDialog> {
+  late Color pickerColor;
+
+  @override
+  void initState() {
+    super.initState();
+    pickerColor = widget.initialColor;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Choose Accent Color'),
+      content: SingleChildScrollView(
+        child: ColorPicker(
+          color: pickerColor,
+          onColorChanged: (Color color) {
+            setState(() {
+              pickerColor = color;
+            });
+            widget.onColorChanged(color);
+          },
+          width: 40,
+          height: 40,
+          borderRadius: 4,
+          spacing: 5,
+          runSpacing: 5,
+          wheelDiameter: 200,
+          heading: Text(
+            'Select color',
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
+          subheading: Text(
+            'Select color shade',
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
+          wheelSubheading: Text(
+            'Selected color and its shades',
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
+          showMaterialName: true,
+          showColorName: true,
+          showColorCode: true,
+          copyPasteBehavior: const ColorPickerCopyPasteBehavior(
+            longPressMenu: true,
+          ),
+          materialNameTextStyle: Theme.of(context).textTheme.bodySmall,
+          colorNameTextStyle: Theme.of(context).textTheme.bodySmall,
+          colorCodeTextStyle: Theme.of(context).textTheme.bodySmall,
+          pickersEnabled: const <ColorPickerType, bool>{
+            ColorPickerType.both: false,
+            ColorPickerType.primary: true,
+            ColorPickerType.accent: true,
+            ColorPickerType.bw: false,
+            ColorPickerType.custom: false,
+            ColorPickerType.wheel: true,
+          },
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Done'),
+        ),
+      ],
     );
   }
 }

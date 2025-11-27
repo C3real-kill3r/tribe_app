@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:tribe/core/di/service_locator.dart' as di;
 import 'package:tribe/core/router/app_router.dart';
@@ -9,6 +10,15 @@ import 'package:tribe/features/auth/presentation/bloc/auth_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Load environment variables from .env file
+  try {
+    await dotenv.load(fileName: '.env');
+  } catch (e) {
+    // .env file not found, will use defaults
+    debugPrint('Warning: .env file not found. Using default values.');
+  }
+  
   await di.init();
   runApp(const TribeApp());
 }

@@ -1,4 +1,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Internet permission for network requests -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    
+    <!-- Notification permission for Android 13+ (API 33+) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    
+    <!-- Photo/Media permissions -->
+    <!-- For Android 13+ (API 33+): Read media images -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <!-- For Android 14+ (API 34+): Partial media access -->
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED"/>
+    <!-- For older Android versions: Read external storage -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32"/>
+    
+    <!-- Camera permission (optional, for taking photos) -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-feature android:name="android.hardware.camera" android:required="false"/>
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
+    
     <application
         android:label="tribe"
         android:name="${applicationName}"
@@ -29,5 +48,19 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        
+        <!-- Notification service for handling notifications -->
+        <service
+            android:name="com.google.firebase.messaging.FirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        
+        <!-- Default notification channel (Android 8.0+) -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="tribe_notifications" />
     </application>
 </manifest>

@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:tribe/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:tribe/core/di/service_locator.dart' as di;
+import 'package:tribe/core/router/app_router.dart';
+import 'package:tribe/features/user/presentation/bloc/user_bloc.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -33,30 +35,68 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.only(bottom: 100),
-        child: Column(
-          children: [
-            _buildHeader(context),
-            const SizedBox(height: 16),
-            _buildUserInfo(context),
-            const SizedBox(height: 24),
-            _buildStatsGrid(context),
-            const SizedBox(height: 32),
-            _buildRecentActivity(context),
-            const SizedBox(height: 32),
-            _buildTabsAndContent(context),
-            const SizedBox(height: 32),
-            _buildLogoutButton(context),
-          ],
-        ),
+    return BlocProvider(
+      create: (context) => di.sl<UserBloc>()..add(LoadUserProfile()),
+      child: BlocBuilder<UserBloc, UserState>(
+        builder: (context, state) {
+          if (state is UserLoading) {
+            return Scaffold(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              body: const Center(child: CircularProgressIndicator()),
+            );
+          }
+
+          if (state is UserError) {
+            return Scaffold(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Error: ${state.message}'),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        context.read<UserBloc>().add(LoadUserProfile());
+                      },
+                      child: const Text('Retry'),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+
+          final user = state is UserLoaded ? state.user : null;
+
+          return Scaffold(
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            body: SingleChildScrollView(
+              padding: const EdgeInsets.only(bottom: 100),
+              child: Column(
+                children: [
+                  _buildHeader(context, user),
+                  const SizedBox(height: 16),
+                  _buildUserInfo(context, user),
+                  const SizedBox(height: 24),
+                  _buildStatsGrid(context, user),
+                  const SizedBox(height: 32),
+                  _buildRecentActivity(context),
+                  const SizedBox(height: 32),
+                  _buildTabsAndContent(context),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader(BuildContext context, user) {
+    final coverImageUrl = user?.coverImageUrl;
+    final profileImageUrl = user?.profileImageUrl;
+    
     return Stack(
       clipBehavior: Clip.none,
       alignment: Alignment.center,
@@ -69,8 +109,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             image: DecorationImage(
               image: _coverImage != null
                   ? FileImage(_coverImage!) as ImageProvider
-                  : const NetworkImage(
-                      'https://lh3.googleusercontent.com/aida-public/AB6AXuDeHJq-18ClaxVINXBZ-uWMAAhloMGYLrPy4Eye0aQCKCD-HBZY-SGIvvGTekRfmztwCfIEXFLqmquCYOP65P2vDiQs8TY7YoCZuT6MMAnluWf3LZhZkS5hdXJUl8BpG3AfWLCc9jHkby7gDCE_Ogk0KcZ-mP6ZygyqELAG8rz7KhrOCUcww1WM5yg38ql3VW_UFdy8GXVQS5P_2ACl_L0PRQmOwACuXBg6ott0KZAAeFiJxWqmJwD9KC2s_8VODZjl73qPfIv6FMw'),
+                  : (coverImageUrl != null && coverImageUrl.isNotEmpty
+                      ? NetworkImage(coverImageUrl) as ImageProvider
+                      : const NetworkImage(
+                          'https://lh3.googleusercontent.com/aida-public/AB6AXuDeHJq-18ClaxVINXBZ-uWMAAhloMGYLrPy4Eye0aQCKCD-HBZY-SGIvvGTekRfmztwCfIEXFLqmquCYOP65P2vDiQs8TY7YoCZuT6MMAnluWf3LZhZkS5hdXJUl8BpG3AfWLCc9jHkby7gDCE_Ogk0KcZ-mP6ZygyqELAG8rz7KhrOCUcww1WM5yg38ql3VW_UFdy8GXVQS5P_2ACl_L0PRQmOwACuXBg6ott0KZAAeFiJxWqmJwD9KC2s_8VODZjl73qPfIv6FMw') as ImageProvider),
               fit: BoxFit.cover,
             ),
           ),
@@ -100,7 +142,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: IconButton(
                       icon: const Icon(Icons.settings_outlined,
                           color: Colors.white),
-                      onPressed: () => context.push('/settings'),
+                      onPressed: () {
+                        // Use root navigator for iOS compatibility when navigating
+                        // to routes outside the StatefulShellRoute
+                        final rootContext = rootNavigatorKey.currentContext;
+                        if (rootContext != null) {
+                          GoRouter.of(rootContext).push('/settings');
+                        } else {
+                          // Fallback to regular context if root navigator not available
+                          context.push('/settings');
+                        }
+                      },
                     ),
                   ),
                 ],
@@ -153,8 +205,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   image: DecorationImage(
                     image: _profileImage != null
                         ? FileImage(_profileImage!) as ImageProvider
-                        : const NetworkImage(
-                            'https://lh3.googleusercontent.com/aida-public/AB6AXuDDA3LI2-AtzMBHHsrrpuPpFgxfLuzB_84RM2Q66XaMlVAitG7eKbhhVY9UKfcDl20EpvLXfN6GvbGxR0GcsLzfl-Bfx59H4QP29vxIiRU108O_8wppJ-XvFKgcE1UuIeswvFRpGLaw5sHJyoDJQIyoVu5JDurn6cOwlwHa_SOQwpFHs1m4uSvu7RGbMrf5tNvf1of3_Jy5_5KyrbVYDHmKYl0GUgw8PMOSUQOSfh9emPGb-qTYmiaId3bbz8Q2lpa443fiE-MiJlg'),
+                        : (profileImageUrl != null && profileImageUrl.isNotEmpty
+                            ? NetworkImage(profileImageUrl) as ImageProvider
+                            : const NetworkImage(
+                                'https://lh3.googleusercontent.com/aida-public/AB6AXuDDA3LI2-AtzMBHHsrrpuPpFgxfLuzB_84RM2Q66XaMlVAitG7eKbhhVY9UKfcDl20EpvLXfN6GvbGxR0GcsLzfl-Bfx59H4QP29vxIiRU108O_8wppJ-XvFKgcE1UuIeswvFRpGLaw5sHJyoDJQIyoVu5JDurn6cOwlwHa_SOQwpFHs1m4uSvu7RGbMrf5tNvf1of3_Jy5_5KyrbVYDHmKYl0GUgw8PMOSUQOSfh9emPGb-qTYmiaId3bbz8Q2lpa443fiE-MiJlg') as ImageProvider),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -183,41 +237,56 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildUserInfo(BuildContext context) {
+  Widget _buildUserInfo(BuildContext context, user) {
+    final fullName = user?.fullName ?? 'Loading...';
+    final bio = user?.bio ?? '';
+    
     return Padding(
       padding: const EdgeInsets.only(top: 40, left: 16, right: 16),
       child: Column(
         children: [
           Text(
-            'Brian Okuku',
+            fullName,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
           ),
           const SizedBox(height: 4),
-          Text(
-            '"Chasing goals and making memories with my favorite people. ✨"',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey,
-                ),
-          ),
+          if (bio.isNotEmpty)
+            Text(
+              '"$bio"',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Colors.grey,
+                  ),
+            )
+          else
+            Text(
+              'No bio yet',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Colors.grey,
+                  ),
+            ),
         ],
       ),
     );
   }
 
-  Widget _buildStatsGrid(BuildContext context) {
+  Widget _buildStatsGrid(BuildContext context, user) {
+    final goalsAchieved = user?.goalsAchieved ?? 0;
+    final photosShared = user?.photosShared ?? 0;
+    
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
           Expanded(
-            child: _buildStatCard(context, '5', 'Goals Achieved'),
+            child: _buildStatCard(context, goalsAchieved.toString(), 'Goals Achieved'),
           ),
           const SizedBox(width: 16),
           Expanded(
-            child: _buildStatCard(context, '128', 'Photos Shared'),
+            child: _buildStatCard(context, photosShared.toString(), 'Photos Shared'),
           ),
         ],
       ),
@@ -561,22 +630,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildLogoutButton(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-          onPressed: () {
-            context.read<AuthBloc>().add(AuthLogoutRequested());
-            context.go('/login');
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Theme.of(context).colorScheme.error,
-          ),
-          child: const Text('Logout'),
-        ),
-      ),
-    );
-  }
 }

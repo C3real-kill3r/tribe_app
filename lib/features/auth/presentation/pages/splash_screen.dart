@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tribe/core/theme/app_theme.dart';
+import 'package:tribe/features/auth/presentation/bloc/auth_bloc.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -24,6 +26,9 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
+
+    // Trigger auth check immediately
+    context.read<AuthBloc>().add(AuthCheckRequested());
 
     // Logo animation controller
     _logoController = AnimationController(
@@ -105,15 +110,40 @@ class _SplashScreenState extends State<SplashScreen>
     await Future.delayed(const Duration(milliseconds: 300));
     await _textController.forward();
     
-    // Wait before navigating
+    // Wait for auth check to complete (minimum 1.5 seconds for animations)
     await Future.delayed(const Duration(milliseconds: 1500));
+    
+    // Wait for auth state to be determined (not initial or loading)
+    await _waitForAuthCheck();
     
     // Fade out
     await _fadeController.forward();
     
-    // Navigate to welcome page
+    // Navigate based on auth state
     if (mounted) {
-      context.go('/welcome');
+      final authState = context.read<AuthBloc>().state;
+      if (authState is AuthAuthenticated) {
+        context.go('/home');
+      } else {
+        context.go('/welcome');
+      }
+    }
+  }
+
+  Future<void> _waitForAuthCheck() async {
+    // Wait until auth state is determined (not initial or loading)
+    final authBloc = context.read<AuthBloc>();
+    int attempts = 0;
+    const maxAttempts = 50; // 5 seconds max wait (50 * 100ms)
+    
+    while (mounted && attempts < maxAttempts) {
+      final state = authBloc.state;
+      if (state is! AuthInitial && state is! AuthLoading) {
+        // Auth check completed
+        break;
+      }
+      await Future.delayed(const Duration(milliseconds: 100));
+      attempts++;
     }
   }
 
@@ -129,7 +159,20 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     
-    return Scaffold(
+    // Listen to auth state changes to navigate when ready
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        // Only navigate if we're past the initial animation phase
+        // This prevents premature navigation during splash animation
+        if (_fadeController.isCompleted || _fadeController.isAnimating) {
+          if (state is AuthAuthenticated) {
+            context.go('/home');
+          } else if (state is AuthUnauthenticated || state is AuthFailure) {
+            context.go('/welcome');
+          }
+        }
+      },
+      child: Scaffold(
       body: FadeTransition(
         opacity: _fadeAnimation,
         child: Container(
@@ -223,6 +266,7 @@ class _SplashScreenState extends State<SplashScreen>
             ),
           ),
         ),
+      ),
       ),
     );
   }

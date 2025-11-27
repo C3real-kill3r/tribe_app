@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:tribe/core/theme/app_theme.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -12,6 +13,29 @@ class WelcomePage extends StatefulWidget {
 class _WelcomePageState extends State<WelcomePage> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
+  bool _notificationsEnabled = true;
+  bool _photosEnabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkInitialPermissions();
+  }
+
+  Future<void> _checkInitialPermissions() async {
+    // Check notification permission
+    final notificationStatus = await Permission.notification.status;
+    
+    // Check photo permission (use photos for both iOS and Android 13+)
+    final photoStatus = await Permission.photos.status;
+    
+    if (mounted) {
+      setState(() {
+        _notificationsEnabled = notificationStatus.isGranted;
+        _photosEnabled = photoStatus.isGranted;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -276,7 +300,35 @@ class _WelcomePageState extends State<WelcomePage> {
             Icons.notifications,
             'Enable Notifications',
             'Get updates on goal progress.',
-            true,
+            _notificationsEnabled,
+            (value) async {
+              if (value) {
+                // Request notification permission
+                final status = await Permission.notification.request();
+                setState(() {
+                  _notificationsEnabled = status.isGranted;
+                });
+                
+                if (status.isDenied) {
+                  _showPermissionDialog(
+                    context,
+                    'Notification Permission',
+                    'Please enable notifications in your device settings to receive updates on goal progress.',
+                  );
+                } else if (status.isPermanentlyDenied) {
+                  _showPermissionSettingsDialog(
+                    context,
+                    'Notification Permission',
+                    'Notifications are permanently denied. Please enable them in your device settings.',
+                  );
+                }
+              } else {
+                // User disabled notifications
+                setState(() {
+                  _notificationsEnabled = false;
+                });
+              }
+            },
           ),
           const SizedBox(height: 16),
           _buildPermissionItem(
@@ -284,7 +336,49 @@ class _WelcomePageState extends State<WelcomePage> {
             Icons.photo_library,
             'Access Photos',
             'Share memories with your group.',
-            false,
+            _photosEnabled,
+            (value) async {
+              if (value) {
+                // Request photo permission
+                // Use photos for both iOS and Android 13+
+                // For older Android versions, fallback to storage
+                Permission photoPermission = Permission.photos;
+                
+                // Check if photos permission is available (Android 13+)
+                final photosStatus = await Permission.photos.status;
+                if (!photosStatus.isGranted && photosStatus.isDenied) {
+                  // Try storage for older Android versions
+                  final storageStatus = await Permission.storage.status;
+                  if (storageStatus.isDenied || storageStatus.isGranted) {
+                    photoPermission = Permission.storage;
+                  }
+                }
+                
+                final status = await photoPermission.request();
+                setState(() {
+                  _photosEnabled = status.isGranted;
+                });
+                
+                if (status.isDenied) {
+                  _showPermissionDialog(
+                    context,
+                    'Photo Permission',
+                    'Please enable photo access in your device settings to share memories with your group.',
+                  );
+                } else if (status.isPermanentlyDenied) {
+                  _showPermissionSettingsDialog(
+                    context,
+                    'Photo Permission',
+                    'Photo access is permanently denied. Please enable it in your device settings.',
+                  );
+                }
+              } else {
+                // User disabled photo access
+                setState(() {
+                  _photosEnabled = false;
+                });
+              }
+            },
           ),
           const SizedBox(height: 32),
           Text(
@@ -305,6 +399,7 @@ class _WelcomePageState extends State<WelcomePage> {
     String title,
     String description,
     bool isEnabled,
+    ValueChanged<bool> onChanged,
   ) {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -324,11 +419,18 @@ class _WelcomePageState extends State<WelcomePage> {
           Container(
             width: 48,
             height: 48,
-            decoration: const BoxDecoration(
-              color: AppTheme.primaryLight,
+            decoration: BoxDecoration(
+              color: isEnabled
+                  ? AppTheme.primaryLight
+                  : AppTheme.primaryLight.withOpacity(0.5),
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, color: AppTheme.primaryDark),
+            child: Icon(
+              icon,
+              color: isEnabled
+                  ? AppTheme.primaryDark
+                  : AppTheme.primaryDark.withOpacity(0.5),
+            ),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -339,12 +441,25 @@ class _WelcomePageState extends State<WelcomePage> {
                   title,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
+                        color: isEnabled
+                            ? null
+                            : Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.color
+                                ?.withOpacity(0.6),
                       ),
                 ),
                 Text(
                   description,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).textTheme.bodySmall?.color,
+                        color: isEnabled
+                            ? Theme.of(context).textTheme.bodySmall?.color
+                            : Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.color
+                                ?.withOpacity(0.6),
                       ),
                 ),
               ],
@@ -352,8 +467,55 @@ class _WelcomePageState extends State<WelcomePage> {
           ),
           Switch(
             value: isEnabled,
-            onChanged: (val) {},
+            onChanged: onChanged,
             activeColor: Theme.of(context).colorScheme.primary,
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showPermissionDialog(
+    BuildContext context,
+    String title,
+    String message,
+  ) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showPermissionSettingsDialog(
+    BuildContext context,
+    String title,
+    String message,
+  ) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              openAppSettings();
+            },
+            child: const Text('Open Settings'),
           ),
         ],
       ),
